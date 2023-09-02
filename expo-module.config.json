@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android", "web"],
+  "ios": {
+    "modules": ["ReactNativeYocoModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.yoco.ReactNativeYocoModule"]
+  }
+}
