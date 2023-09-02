@@ -3,8 +3,7 @@ import { NativeModulesProxy, EventEmitter, Subscription } from 'expo-modules-cor
 // Import the native module. On web, it will be resolved to ReactNativeYoco.web.ts
 // and on native platforms to ReactNativeYoco.ts
 import ReactNativeYocoModule from './ReactNativeYocoModule';
-import ReactNativeYocoView from './ReactNativeYocoView';
-import { ChangeEventPayload, ReactNativeYocoViewProps } from './ReactNativeYoco.types';
+import { ChangeEventPayload } from './ReactNativeYoco.types';
 
 // Get the native constant value.
 export const PI = ReactNativeYocoModule.PI;
@@ -23,4 +22,4 @@ export function addChangeListener(listener: (event: ChangeEventPayload) => void)
   return emitter.addListener<ChangeEventPayload>('onChange', listener);
 }
 
-export { ReactNativeYocoView, ReactNativeYocoViewProps, ChangeEventPayload };
+export { ChangeEventPayload };
