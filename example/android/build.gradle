@@ -36,5 +36,7 @@ allprojects {
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
+
+        maven { url 'https://yocotechnologies.jfrog.io/artifactory/public/' }
     }
 }

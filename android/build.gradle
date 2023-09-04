@@ -32,8 +32,12 @@ buildscript {
 
   dependencies {
     classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${getKotlinVersion()}")
+    
+    classpath("org.jfrog.buildinfo:build-info-extractor-gradle:5.1.2")
   }
 }
+
+apply plugin: "com.jfrog.artifactory"
 
 afterEvaluate {
   publishing {
@@ -62,6 +66,10 @@ android {
     jvmTarget = JavaVersion.VERSION_11.majorVersion
   }
 
+  buildFeatures {
+    dataBinding true
+  }
+
   namespace "expo.modules.yoco"
   defaultConfig {
     minSdkVersion safeExtGet("minSdkVersion", 21)
@@ -83,7 +91,17 @@ repositories {
   mavenCentral()
 }
 
+allprojects {
+  repositories {
+    mavenCentral()
+    // Include the Payments SDK (related dependencies)
+    maven { url 'https://yocotechnologies.jfrog.io/artifactory/public/' }
+  }
+}
+
 dependencies {
   implementation project(':expo-modules-core')
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${getKotlinVersion()}"
+
+  implementation 'com.yoco:payment-ui:1.13.17'
 }
