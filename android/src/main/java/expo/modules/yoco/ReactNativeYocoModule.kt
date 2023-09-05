@@ -18,6 +18,7 @@ import expo.modules.kotlin.functions.Queues
 import expo.modules.yoco.data.params.PaymentParameters
 import expo.modules.yoco.data.result.ChargeResult
 import expo.modules.yoco.data.result.PaymentResult
+import expo.modules.yoco.data.result.QueryTransactionsResult
 import expo.modules.yoco.enums.*
 
 class ReactNativeYocoModule : Module() {
@@ -29,7 +30,6 @@ class ReactNativeYocoModule : Module() {
 
     private var pairTerminalPromise : Promise? = null
     private var chargePromise : Promise? = null
-    private val paymentResultPromise : Promise? = null
 
     override fun definition() = ModuleDefinition {
         // Sets the name of the module that JavaScript code will use to refer to the module.
@@ -115,14 +115,14 @@ class ReactNativeYocoModule : Module() {
         }
 
         AsyncFunction("getPaymentResult") { transactionId: String, show: Boolean, promise: Promise ->
-            YocoSDK.getPaymentResult(transactionId) { resultCode, result, _ ->
+            YocoSDK.getPaymentResult(transactionId) { resultCode, result, errorMessage ->
                     val resCode = ResultCodeAdaptor(resultCode)
 
                     val res = PaymentResult()
 
                     res.injectValues(
                         resCode.get(),
-                        result?.errorMessage,
+                        errorMessage,
                         result?.amountInCents,
                         PaymentTypeAdaptor(result?.paymentType.toString()).get(),
                         SupportedCurrencyAdaptor(result?.currency.toString()).get(),
@@ -141,6 +141,39 @@ class ReactNativeYocoModule : Module() {
 
                     promise.resolve(res)
                 }
+        }.runOnQueue(Queues.MAIN)
+
+        AsyncFunction("queryTransactions") { receiptNumber: String, promise: Promise ->
+            YocoSDK.getIntegratorTransactions(receiptNumber) { resultCode, transactions, errorMessage ->
+                val resCode = ResultCodeAdaptor(resultCode)
+
+                val resList = mutableListOf<PaymentResult>()
+
+                transactions?.forEach { transaction ->
+                    val temp = PaymentResult()
+
+                    temp.injectValues(
+                        resCode.get(),
+                        errorMessage,
+                        transaction.amountInCents,
+                        PaymentTypeAdaptor(transaction.paymentType.toString()).get(),
+                        SupportedCurrencyAdaptor(transaction.currency.toString()).get(),
+                        transaction.tipInCents,
+                        transaction.finalAmountInCents,
+                        transaction.clientTransactionId,
+                    )
+
+                    resList.add(temp)
+                }
+
+                val res = QueryTransactionsResult().injectValues(
+                    resCode.get(),
+                    errorMessage,
+                    resList
+                )
+
+                promise.resolve(res)
+            }
         }.runOnQueue(Queues.MAIN)
 
         OnActivityResult { activity, result ->

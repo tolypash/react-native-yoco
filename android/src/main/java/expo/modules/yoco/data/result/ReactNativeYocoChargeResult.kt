@@ -33,7 +33,7 @@ class ChargeResult : Record {
         paymentType: PaymentType?,
         currency: SupportedCurrency?,
         tipInCents: Int?,
-    ) {
+    ): ChargeResult {
         if (resultCode != null) {
             this.resultCode = resultCode
         }
@@ -43,6 +43,8 @@ class ChargeResult : Record {
         this.paymentType = paymentType
         this.currency = currency
         this.tipInCents = tipInCents
+
+        return this
     }
 }
 

@@ -51,3 +51,13 @@ export type PaymentResult = {
   finalAmountInCents?: number;
   clientTransactionId?: string;
 };
+
+export type QueryTransactionsParams = {
+  receiptNumber: string;
+};
+
+export type QueryTransactionsResult = {
+  resultCode?: string;
+  errorMessage?: string;
+  transactions?: PaymentResult[];
+};

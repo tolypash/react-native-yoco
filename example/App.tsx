@@ -1,3 +1,5 @@
+/** @TODO componentize each section and repetitions */
+
 import { useState } from "react";
 import {
   SafeAreaView,
@@ -12,25 +14,33 @@ import {
 import JSONTree from "react-native-json-tree";
 
 import * as ReactNativeYoco from "react-native-yoco";
-import { ChargeResult, PaymentResult } from "react-native-yoco";
 
 const LOGO_DIMENSIONS = { width: 651, height: 286 };
 
 export default function App() {
-  const [secret, setSecret] = useState(process.env.SECRET || "");
+  const [secret, setSecret] = useState("s-4t2idmgln278hop005ltoks63eo");
 
   const [pairTerminalLoading, setPairTerminalLoading] = useState(false);
 
   const [amountInCentsText, setAmountInCentsText] = useState("");
   const [tipInCentsText, setTipInCentsText] = useState("");
 
-  const [chargeResult, setChargeResult] = useState<ChargeResult>();
+  const [chargeResult, setChargeResult] =
+    useState<ReactNativeYoco.ChargeResult>();
   const [chargeLoading, setChargeLoading] = useState(false);
 
   const [paymentResultTransactionIdText, setPaymentResultTransactionIdText] =
     useState("");
-  const [paymentResult, setPaymentResult] = useState<PaymentResult>();
+  const [paymentResult, setPaymentResult] =
+    useState<ReactNativeYoco.PaymentResult>();
   const [paymentResultLoading, setPaymentResultLoading] = useState(false);
+
+  const [queryTransactionsParams, setQueryTransactionsParams] =
+    useState<ReactNativeYoco.QueryTransactionsParams>({ receiptNumber: "" });
+  const [queryTransactionsResult, setQueryTransactionsResult] =
+    useState<ReactNativeYoco.QueryTransactionsResult>();
+  const [queryTransactionsLoading, setQueryTransactionsLoading] =
+    useState(false);
 
   return (
     <ScrollView
@@ -149,7 +159,9 @@ export default function App() {
             onChangeText={setTipInCentsText}
           />
 
-          <JSONTree data={chargeResult || {}} />
+          <View style={{ width: "100%" }}>
+            <JSONTree data={chargeResult || {}} />
+          </View>
 
           <Button
             title={"Charge" + (chargeLoading ? " (loading...)" : "")}
@@ -179,7 +191,7 @@ export default function App() {
 
                 console.log(res);
 
-                setChargeResult(res)
+                setChargeResult(res);
               } catch (e) {
                 console.error(e);
               } finally {
@@ -198,7 +210,7 @@ export default function App() {
             alignItems: "center",
             marginVertical: 10,
             paddingVertical: 10,
-            rowGap: 10
+            rowGap: 10,
           }}
         >
           <TextInput
@@ -211,7 +223,9 @@ export default function App() {
             onChangeText={setPaymentResultTransactionIdText}
           />
 
-          <JSONTree data={paymentResult || {}} />
+          <View style={{ width: "100%" }}>
+            <JSONTree data={paymentResult || {}} />
+          </View>
 
           <Button
             title={
@@ -234,6 +248,63 @@ export default function App() {
                 console.error(e);
               } finally {
                 setPaymentResultLoading(false);
+              }
+            }}
+          />
+        </View>
+
+        <View
+          style={{
+            width: "100%",
+            borderColor: "lightgray",
+            borderTopWidth: 1,
+            borderBottomWidth: 1,
+            alignItems: "center",
+            marginVertical: 10,
+            paddingVertical: 10,
+            rowGap: 10,
+          }}
+        >
+          <TextInput
+            placeholder="Input Receipt Number"
+            style={{
+              width: "90%",
+              marginVertical: 10,
+            }}
+            value={queryTransactionsParams.receiptNumber}
+            onChangeText={(text) => {
+              setQueryTransactionsParams({
+                ...queryTransactionsParams,
+                receiptNumber: text,
+              });
+            }}
+          />
+
+          <View style={{ width: "100%" }}>
+            <JSONTree data={queryTransactionsResult || {}} />
+          </View>
+
+          <Button
+            title={
+              "Query transactions" +
+              (queryTransactionsLoading ? " (loading...)" : "")
+            }
+            disabled={queryTransactionsLoading}
+            onPress={async () => {
+              try {
+                setQueryTransactionsLoading(true);
+
+                const res = await ReactNativeYoco.queryTransactions(
+                  queryTransactionsParams
+                );
+
+                console.log(res);
+
+                setQueryTransactionsResult(res);
+              } catch (e) {
+                console.error(e);
+              } finally {
+                setQueryTransactionsLoading(false);
               }
             }}
           />

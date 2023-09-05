@@ -14,6 +14,8 @@ import {
   ConfigureParams,
   PaymentResult as PaymentResult,
   GetPaymentResultParams,
+  QueryTransactionsParams,
+  QueryTransactionsResult,
 } from "./ReactNativeYoco.types";
 import {
   PaymentType,
@@ -75,7 +77,16 @@ export async function charge(params: ChargeParams): Promise<ChargeResult> {
 export async function getPaymentResult(
   params: GetPaymentResultParams
 ): Promise<PaymentResult> {
-  return await ReactNativeYocoModule.getPaymentResult(params.transactionId, params.showResult || false);
+  return await ReactNativeYocoModule.getPaymentResult(
+    params.transactionId,
+    params.showResult || false
+  );
+}
+
+export async function queryTransactions(
+  params: QueryTransactionsParams
+): Promise<QueryTransactionsResult> {
+  return await ReactNativeYocoModule.queryTransactions(params.receiptNumber);
 }
 
 const emitter = new EventEmitter(
@@ -90,11 +101,13 @@ export function addChangeListener(
 
 export {
   ChangeEventPayload,
-  ChargeParams,
   ConfigureParams,
   PaymentType,
   SupportedCurrency,
+  ChargeParams,
   ChargeResult,
   PaymentResult,
   ResultCodes,
+  QueryTransactionsParams,
+  QueryTransactionsResult,
 };

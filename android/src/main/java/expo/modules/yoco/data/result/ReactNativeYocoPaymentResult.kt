@@ -41,7 +41,7 @@ class PaymentResult : Record {
         tipInCents: Int?,
         finalAmountInCents: Long?,
         clientTransactionId: String?
-    ) {
+    ): PaymentResult {
         if (resultCode != null) {
             this.resultCode = resultCode
         }
@@ -53,6 +53,8 @@ class PaymentResult : Record {
         this.tipInCents = tipInCents
         this.finalAmountInCents = finalAmountInCents
         this.clientTransactionId = clientTransactionId
+
+        return this
     }
 }
 
