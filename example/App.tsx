@@ -73,6 +73,8 @@ export default function App() {
               setPaymentResult(undefined);
               setChargeLoading(false);
               setChargeResult(undefined);
+              setQueryTransactionsLoading(false);
+              setQueryTransactionsResult(undefined);
             }}
           />
 
