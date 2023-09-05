@@ -34,3 +34,18 @@ export type ChargeResult = {
   currency?: SupportedCurrency;
   tipInCents?: number;
 };
+
+export type GetPaymentResultParams = {
+  transactionId: string;
+};
+
+export type PaymentResult = {
+  resultCode?: string;
+  errorMessage?: string;
+  amountInCents?: number;
+  paymentType?: PaymentType;
+  currency?: SupportedCurrency;
+  tipInCents?: number;
+  finalAmountInCents?: number;
+  clientTransactionId?: string;
+};

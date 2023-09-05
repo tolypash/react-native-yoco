@@ -12,6 +12,8 @@ import {
   ChargeParams,
   ChargeResult,
   ConfigureParams,
+  PaymentResult as PaymentResult,
+  GetPaymentResultParams,
 } from "./ReactNativeYoco.types";
 import {
   PaymentType,
@@ -70,6 +72,12 @@ export async function charge(params: ChargeParams): Promise<ChargeResult> {
   );
 }
 
+export async function getPaymentResult(
+  params: GetPaymentResultParams
+): Promise<PaymentResult> {
+  return await ReactNativeYocoModule.getPaymentResult(params.transactionId);
+}
+
 const emitter = new EventEmitter(
   ReactNativeYocoModule ?? NativeModulesProxy.ReactNativeYoco
 );
@@ -86,4 +94,7 @@ export {
   ConfigureParams,
   PaymentType,
   SupportedCurrency,
+  ChargeResult,
+  PaymentResult,
+  ResultCodes,
 };

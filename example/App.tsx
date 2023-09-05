@@ -9,8 +9,10 @@ import {
   View,
   ScrollView,
 } from "react-native";
+import JSONTree from "react-native-json-tree";
 
 import * as ReactNativeYoco from "react-native-yoco";
+import { ChargeResult, PaymentResult } from "react-native-yoco";
 
 const LOGO_DIMENSIONS = { width: 651, height: 286 };
 
@@ -25,7 +27,13 @@ export default function App() {
   const [amountInCentsText, setAmountInCentsText] = useState("");
   const [tipInCentsText, setTipInCentsText] = useState("");
 
+  const [chargeResult, setChargeResult] = useState<ChargeResult>();
   const [chargeLoading, setChargeLoading] = useState(false);
+
+  const [paymentResultTransactionIdText, setPaymentResultTransactionIdText] =
+    useState("");
+  const [paymentResult, setPaymentResult] = useState<PaymentResult>();
+  const [paymentResultLoading, setPaymentResultLoading] = useState(false);
 
   return (
     <ScrollView
@@ -49,6 +57,12 @@ export default function App() {
             title="Initialise SDK"
             onPress={() => {
               ReactNativeYoco.initialise();
+
+              setPairTerminalLoading(false);
+              setPaymentResultLoading(false);
+              setPaymentResult(undefined);
+              setChargeLoading(false);
+              setChargeResult(undefined);
             }}
           />
 
@@ -86,7 +100,7 @@ export default function App() {
             title="Configure"
             onPress={() => {
               const res = ReactNativeYoco.configure({ secret });
-              console.log(res)
+              console.log(res);
             }}
           />
         </View>
@@ -116,6 +130,7 @@ export default function App() {
             alignItems: "center",
             marginVertical: 10,
             paddingVertical: 10,
+            rowGap: 10,
           }}
         >
           <TextInput
@@ -136,6 +151,8 @@ export default function App() {
             value={tipInCentsText}
             onChangeText={setTipInCentsText}
           />
+
+          <JSONTree data={chargeResult || {}} />
 
           <Button
             title={"Charge" + (chargeLoading ? " (loading...)" : "")}
@@ -163,11 +180,63 @@ export default function App() {
                   tipInCents: tipInCentsText === "" ? undefined : tipInCents,
                 });
 
-                console.log(res)
+                console.log(res);
+
+                setChargeResult(res)
               } catch (e) {
                 console.error(e);
               } finally {
                 setChargeLoading(false);
+              }
+            }}
+          />
+        </View>
+
+        <View
+          style={{
+            width: "100%",
+            borderColor: "lightgray",
+            borderTopWidth: 1,
+            borderBottomWidth: 1,
+            alignItems: "center",
+            marginVertical: 10,
+            paddingVertical: 10,
+            rowGap: 10
+          }}
+        >
+          <TextInput
+            placeholder="Input Transaction ID"
+            style={{
+              width: "90%",
+              marginVertical: 10,
+            }}
+            value={paymentResultTransactionIdText}
+            onChangeText={setPaymentResultTransactionIdText}
+          />
+
+          <JSONTree data={paymentResult || {}} />
+
+          <Button
+            title={
+              "Get payment result" +
+              (paymentResultLoading ? " (loading...)" : "")
+            }
+            disabled={paymentResultLoading}
+            onPress={async () => {
+              try {
+                setPaymentResultLoading(true);
+
+                const res = await ReactNativeYoco.getPaymentResult({
+                  transactionId: paymentResultTransactionIdText,
+                });
+
+                console.log(res);
+
+                setPaymentResult(res);
+              } catch (e) {
+                console.error(e);
+              } finally {
+                setPaymentResultLoading(false);
               }
             }}
           />

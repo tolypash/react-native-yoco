@@ -14,8 +14,10 @@ import expo.modules.kotlin.events.OnActivityResultPayload
 import expo.modules.kotlin.exception.CodedException
 import expo.modules.kotlin.exception.Exceptions
 import expo.modules.kotlin.exception.toCodedException
+import expo.modules.kotlin.functions.Queues
 import expo.modules.yoco.data.params.PaymentParameters
 import expo.modules.yoco.data.result.ChargeResult
+import expo.modules.yoco.data.result.PaymentResult
 import expo.modules.yoco.enums.*
 
 class ReactNativeYocoModule : Module() {
@@ -27,6 +29,7 @@ class ReactNativeYocoModule : Module() {
 
     private var pairTerminalPromise : Promise? = null
     private var chargePromise : Promise? = null
+    private val paymentResultPromise : Promise? = null
 
     override fun definition() = ModuleDefinition {
         // Sets the name of the module that JavaScript code will use to refer to the module.
@@ -111,6 +114,27 @@ class ReactNativeYocoModule : Module() {
             }
         }
 
+        AsyncFunction("getPaymentResult") { transactionId: String, promise: Promise ->
+            YocoSDK.getPaymentResult(transactionId) { resultCode, result, _ ->
+                    val resCode = ResultCodeAdaptor(resultCode)
+
+                    val res = PaymentResult()
+
+                    res.injectValues(
+                        resCode.get(),
+                        result?.errorMessage,
+                        result?.amountInCents,
+                        PaymentTypeAdaptor(result?.paymentType.toString()).get(),
+                        SupportedCurrencyAdaptor(result?.currency.toString()).get(),
+                        result?.tipInCents,
+                        result?.finalAmountInCents,
+                        result?.clientTransactionId,
+                    )
+
+                    promise.resolve(res)
+                }
+        }.runOnQueue(Queues.MAIN)
+
         OnActivityResult { activity, result ->
             if (result.requestCode == PaymentResultInfo.RequestCode.PAIRING_REQUEST) {
                 onPairTerminalResult(activity, result)
@@ -133,14 +157,14 @@ class ReactNativeYocoModule : Module() {
     }
 
     private fun onChargeResult(activity: Activity, result: OnActivityResultPayload) {
-        val res = ResultCodeAdaptor(result.resultCode)
+        val resCode = ResultCodeAdaptor(result.resultCode)
 
         val paymentResult = YocoSDK.paymentResult
 
         val chargeResult = ChargeResult()
 
         chargeResult.injectValues(
-            resultCode = res.get(),
+            resultCode = resCode.get(),
             errorMessage = paymentResult?.errorMessage,
             amountInCents = paymentResult?.amountInCents,
             paymentType = PaymentTypeAdaptor(paymentResult?.paymentType.toString()).get(),
