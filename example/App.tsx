@@ -16,11 +16,8 @@ import { ChargeResult, PaymentResult } from "react-native-yoco";
 
 const LOGO_DIMENSIONS = { width: 651, height: 286 };
 
-/** INPUT SECRET HERE */
-const SECRET = "s-4t2idmgln278hop005ltoks63eo";
-
 export default function App() {
-  const [secret, setSecret] = useState(SECRET);
+  const [secret, setSecret] = useState(process.env.SECRET || "");
 
   const [pairTerminalLoading, setPairTerminalLoading] = useState(false);
 
