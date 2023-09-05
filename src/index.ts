@@ -16,6 +16,8 @@ import {
   GetPaymentResultParams,
   QueryTransactionsParams,
   QueryTransactionsResult,
+  RefundParams,
+  RefundResult,
 } from "./ReactNativeYoco.types";
 import {
   PaymentType,
@@ -83,6 +85,13 @@ export async function getPaymentResult(
   );
 }
 
+/** @TODO Implement */
+export async function refund(
+  _params: RefundParams
+): Promise<RefundResult | undefined> {
+  throw new Error("Not implemented");
+}
+
 export async function queryTransactions(
   params: QueryTransactionsParams
 ): Promise<QueryTransactionsResult> {
@@ -110,4 +119,6 @@ export {
   ResultCodes,
   QueryTransactionsParams,
   QueryTransactionsResult,
+  RefundParams,
+  RefundResult,
 };

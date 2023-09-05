@@ -61,3 +61,11 @@ export type QueryTransactionsResult = {
   errorMessage?: string;
   transactions?: PaymentResult[];
 };
+
+export type RefundParams = {
+  transactionId: string;
+  amountInCents: number;
+  userInfo?: Record<string, any>;
+};
+
+export type RefundResult = PaymentResult & {};

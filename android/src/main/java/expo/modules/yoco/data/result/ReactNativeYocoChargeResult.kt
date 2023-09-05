@@ -2,7 +2,6 @@ package expo.modules.yoco.data.result
 
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
-import expo.modules.yoco.data.params.PaymentParameters
 import expo.modules.yoco.enums.PaymentType
 import expo.modules.yoco.enums.ResultCode
 import expo.modules.yoco.enums.SupportedCurrency

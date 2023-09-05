@@ -15,7 +15,8 @@ import expo.modules.kotlin.exception.CodedException
 import expo.modules.kotlin.exception.Exceptions
 import expo.modules.kotlin.exception.toCodedException
 import expo.modules.kotlin.functions.Queues
-import expo.modules.yoco.data.params.PaymentParameters
+import expo.modules.yoco.data.params.PaymentParams
+import expo.modules.yoco.data.params.RefundParams
 import expo.modules.yoco.data.result.ChargeResult
 import expo.modules.yoco.data.result.PaymentResult
 import expo.modules.yoco.data.result.QueryTransactionsResult
@@ -80,7 +81,7 @@ class ReactNativeYocoModule : Module() {
             }
         }
 
-        AsyncFunction("charge") { amountInCents: Long, paymentType: PaymentType, currency: SupportedCurrency, tipInCents: Int?, paymentParameters: PaymentParameters?, promise: Promise ->
+        AsyncFunction("charge") { amountInCents: Long, paymentType: PaymentType, currency: SupportedCurrency, tipInCents: Int?, paymentParameters: PaymentParams?, promise: Promise ->
             val tippingConfig = when (tipInCents) {
                 null -> TippingConfig.DO_NOT_ASK_FOR_TIP
                 0 -> TippingConfig.ASK_FOR_TIP_ON_CARD_MACHINE
@@ -175,6 +176,24 @@ class ReactNativeYocoModule : Module() {
                 promise.resolve(res)
             }
         }.runOnQueue(Queues.MAIN)
+
+        AsyncFunction("refund") { _: String, _: RefundParams, promise: Promise ->
+            /**
+             * @TODO Implement. Issue: refundParams and refundParams.staffMember is noted in docs as optional, but not optional here.
+               val yocoRefundParams = com.yoco.payment_ui_sdk.data.params.RefundParameters(
+                amountInCents = params.amountInCents,
+                staffMember = params.staffMember,
+            )
+
+            YocoSDK.refund(
+                context = currentActivity,
+                transactionId,
+
+            )
+            */
+
+            promise.reject(CodedException("Not implemented"))
+        }
 
         OnActivityResult { activity, result ->
             if (result.requestCode == PaymentResultInfo.RequestCode.PAIRING_REQUEST) {

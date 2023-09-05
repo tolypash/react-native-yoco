@@ -3,7 +3,7 @@ package expo.modules.yoco.data.params
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
 
-class PaymentParameters : Record {
+class PaymentParams : Record {
     @Field
     var note: String? = null
 
