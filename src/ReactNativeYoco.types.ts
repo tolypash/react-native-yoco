@@ -37,6 +37,8 @@ export type ChargeResult = {
 
 export type GetPaymentResultParams = {
   transactionId: string;
+  /** Show result, success or error (more info: https://developer.yoco.com/in-person/android/show-transaction-result-android) */
+  showResult?: boolean;
 };
 
 export type PaymentResult = {

@@ -75,7 +75,7 @@ export async function charge(params: ChargeParams): Promise<ChargeResult> {
 export async function getPaymentResult(
   params: GetPaymentResultParams
 ): Promise<PaymentResult> {
-  return await ReactNativeYocoModule.getPaymentResult(params.transactionId);
+  return await ReactNativeYocoModule.getPaymentResult(params.transactionId, params.showResult || false);
 }
 
 const emitter = new EventEmitter(

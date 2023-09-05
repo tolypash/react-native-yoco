@@ -114,7 +114,7 @@ class ReactNativeYocoModule : Module() {
             }
         }
 
-        AsyncFunction("getPaymentResult") { transactionId: String, promise: Promise ->
+        AsyncFunction("getPaymentResult") { transactionId: String, show: Boolean, promise: Promise ->
             YocoSDK.getPaymentResult(transactionId) { resultCode, result, _ ->
                     val resCode = ResultCodeAdaptor(resultCode)
 
@@ -130,6 +130,14 @@ class ReactNativeYocoModule : Module() {
                         result?.finalAmountInCents,
                         result?.clientTransactionId,
                     )
+
+                    if (show && resCode.get() == ResultCode.SUCCESSFUL && result != null) {
+                        YocoSDK.showPaymentResult(
+                            context = currentActivity,
+                            paymentResult = result,
+                            params = null,
+                        )
+                    }
 
                     promise.resolve(res)
                 }
