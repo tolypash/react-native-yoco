@@ -10,15 +10,18 @@ import {
   Text,
   View,
   ScrollView,
+  Platform,
 } from "react-native";
 import JSONTree from "react-native-json-tree";
+import { request, check, PERMISSIONS } from "react-native-permissions";
+import config from "./config.json";
 
 import * as ReactNativeYoco from "react-native-yoco";
 
 const LOGO_DIMENSIONS = { width: 651, height: 286 };
 
 export default function App() {
-  const [secret, setSecret] = useState("s-4t2idmgln278hop005ltoks63eo");
+  const [secret, setSecret] = useState(config?.secret || "");
 
   const [pairTerminalLoading, setPairTerminalLoading] = useState(false);
 
@@ -70,6 +73,21 @@ export default function App() {
               setPaymentResult(undefined);
               setChargeLoading(false);
               setChargeResult(undefined);
+            }}
+          />
+
+          <Button
+            title="Request permissions"
+            onPress={async () => {
+              if (Platform.OS === "android") {
+                await request(PERMISSIONS.ANDROID.BLUETOOTH_CONNECT);
+                await request(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
+
+                console.log(await check(PERMISSIONS.ANDROID.BLUETOOTH_CONNECT));
+                console.log(await check(PERMISSIONS.ANDROID.BLUETOOTH_SCAN));
+              } else if (Platform.OS === "ios") {
+                await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
+              }
             }}
           />
 
