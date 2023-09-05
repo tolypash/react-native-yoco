@@ -14,8 +14,11 @@ import * as ReactNativeYoco from "react-native-yoco";
 
 const LOGO_DIMENSIONS = { width: 651, height: 286 };
 
+/** INPUT SECRET HERE */
+const SECRET = "s-4t2idmgln278hop005ltoks63eo";
+
 export default function App() {
-  const [secret, setSecret] = useState("");
+  const [secret, setSecret] = useState(SECRET);
 
   const [pairTerminalLoading, setPairTerminalLoading] = useState(false);
 
@@ -41,12 +44,23 @@ export default function App() {
 
         <Text style={{ marginBottom: 20 }}>React Native</Text>
 
-        <Button
-          title="Initialise SDK"
-          onPress={() => {
-            ReactNativeYoco.initialise();
-          }}
-        />
+        <View style={{ rowGap: 10 }}>
+          <Button
+            title="Initialise SDK"
+            onPress={() => {
+              ReactNativeYoco.initialise();
+            }}
+          />
+
+          <Button
+            title="Get device type"
+            onPress={() => {
+              const deviceType = ReactNativeYoco.getDeviceType();
+              console.log(deviceType);
+              alert(deviceType);
+            }}
+          />
+        </View>
 
         <View
           style={{
@@ -71,7 +85,8 @@ export default function App() {
           <Button
             title="Configure"
             onPress={() => {
-              ReactNativeYoco.configure({ secret });
+              const res = ReactNativeYoco.configure({ secret });
+              console.log(res)
             }}
           />
         </View>
@@ -131,7 +146,7 @@ export default function App() {
 
                 const amountInCents = Number(amountInCentsText);
 
-                if (isNaN(amountInCents)) {
+                if (!amountInCentsText || isNaN(amountInCents)) {
                   throw new Error("Invalid amount");
                 }
 
@@ -141,12 +156,14 @@ export default function App() {
                   throw new Error("Invalid tip amount");
                 }
 
-                await ReactNativeYoco.charge({
+                const res = await ReactNativeYoco.charge({
                   amountInCents,
                   currency: ReactNativeYoco.SupportedCurrency.ZAR,
                   paymentType: ReactNativeYoco.PaymentType.CARD,
-                  tipInCents,
+                  tipInCents: tipInCentsText === "" ? undefined : tipInCents,
                 });
+
+                console.log(res)
               } catch (e) {
                 console.error(e);
               } finally {

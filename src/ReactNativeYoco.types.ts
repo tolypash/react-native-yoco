@@ -15,7 +15,7 @@ export type PaymentParameters = {
   note?: string;
   billId?: string;
   receiptNumber?: string;
-}
+};
 
 export type ChargeParams = {
   amountInCents: number;
@@ -24,4 +24,13 @@ export type ChargeParams = {
   /** Pass undefined or null to not ask for tip, 0 to ask and pass a valid number to include tip in amount */
   tipInCents?: number | null;
   paymentParameters?: PaymentParameters;
+};
+
+export type ChargeResult = {
+  resultCode?: string;
+  errorMessage?: string;
+  amountInCents?: number;
+  paymentType?: PaymentType;
+  currency?: SupportedCurrency;
+  tipInCents?: number;
 };

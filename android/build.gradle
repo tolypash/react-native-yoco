@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'maven-publish'
 
 group = 'expo.modules.yoco'
@@ -100,8 +101,21 @@ allprojects {
 }
 
 dependencies {
+  def yoco_sdk_version = "1.13.17"
+  def ono_sdk_version = "1.23.6"
+
   implementation project(':expo-modules-core')
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${getKotlinVersion()}"
 
-  implementation 'com.yoco:payment-ui:1.13.17'
+  implementation "com.yoco:payment-ui:$yoco_sdk_version"
+
+  implementation "com.yoco.ono.common:kozen-android:$ono_sdk_version"
+  implementation "com.yoco.ono.android:kozenAndroid:$ono_sdk_version"
+
+  implementation "com.yoco.ono.common:dspread-android:$ono_sdk_version"
+  implementation "com.yoco.ono.common:miura-android:$ono_sdk_version"
+  implementation "com.yoco.ono.common:datecs-android:$ono_sdk_version"
+  implementation "com.yoco.ono.android:dspreadAndroid:$ono_sdk_version"
+  implementation "com.yoco.ono.android:miuraAndroid:$ono_sdk_version"
+  implementation "com.yoco.ono.android:datecsAndroid:$ono_sdk_version"
 }

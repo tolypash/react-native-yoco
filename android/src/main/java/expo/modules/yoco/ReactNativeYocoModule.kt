@@ -1,16 +1,22 @@
 package expo.modules.yoco
 
+import android.app.Activity
 import android.content.Context
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import com.yoco.payment_ui_sdk.YocoSDK
+import com.yoco.payment_ui_sdk.data.delegates.DefaultReceiptDelegate
 import com.yoco.payment_ui_sdk.data.enums.SDKEnvironment
 import com.yoco.payment_ui_sdk.data.params.TippingConfig
+import com.yoco.payment_ui_sdk.data.result.PaymentResultInfo
 import expo.modules.kotlin.Promise
+import expo.modules.kotlin.events.OnActivityResultPayload
+import expo.modules.kotlin.exception.CodedException
 import expo.modules.kotlin.exception.Exceptions
-import expo.modules.yoco.enums.PaymentTypeAdaptor
-import expo.modules.yoco.enums.SupportedCurrencyAdaptor
-import expo.modules.yoco.params.PaymentParameters
+import expo.modules.kotlin.exception.toCodedException
+import expo.modules.yoco.data.params.PaymentParameters
+import expo.modules.yoco.data.result.ChargeResult
+import expo.modules.yoco.enums.*
 
 class ReactNativeYocoModule : Module() {
     private val context: Context
@@ -37,18 +43,23 @@ class ReactNativeYocoModule : Module() {
         Function("initialise") {
             // Initialises Yoco Payment UI SDK
             YocoSDK.initialise(
-                context = context
+                context = context.applicationContext
             )
         }
 
         Function("configure") { secret: String ->
             // Configures the Yoco Payment UI SDK
-            YocoSDK.configure(
-                context = context,
-                secret = secret,
-                environment = SDKEnvironment.PRODUCTION,
-                enableLogging = true
-            )
+            try {
+                YocoSDK.configure(
+                    context = context.applicationContext,
+                    secret = secret,
+                    environment = SDKEnvironment.PRODUCTION,
+                    enableLogging = true
+                )
+            } catch (e: Exception) {
+                System.err.println(e)
+                throw e
+            }
         }
 
         Function("getDeviceType") {
@@ -56,44 +67,89 @@ class ReactNativeYocoModule : Module() {
         }
 
         AsyncFunction("pairTerminal") { promise: Promise ->
-            YocoSDK.pairTerminal(context = currentActivity)
+            try {
+                pairTerminalPromise = promise
 
-            // @TODO resolve promise with OnActivityResult
-
-            promise.resolve(Unit)
-
-            pairTerminalPromise = promise
+                YocoSDK.pairTerminal(context = currentActivity)
+            } catch (e: Exception) {
+                promise.reject(e.toCodedException())
+                throw e
+            }
         }
 
-        AsyncFunction("charge") { amountInCents: Long, paymentType: String, currency: String, tipInCents: Int?, paymentParameters: PaymentParameters?,  promise: Promise ->
+        AsyncFunction("charge") { amountInCents: Long, paymentType: PaymentType, currency: SupportedCurrency, tipInCents: Int?, paymentParameters: PaymentParameters?, promise: Promise ->
             val tippingConfig = when (tipInCents) {
                 null -> TippingConfig.DO_NOT_ASK_FOR_TIP
                 0 -> TippingConfig.ASK_FOR_TIP_ON_CARD_MACHINE
                 else -> TippingConfig.INCLUDE_TIP_IN_AMOUNT(tipInCents)
             }
 
-            val paymentParams =  com.yoco.payment_ui_sdk.data.params.PaymentParameters()
-
-            val res = YocoSDK.charge(
-                context = currentActivity,
-                amountInCents,
-                PaymentTypeAdaptor(paymentType).toYoco(),
-                SupportedCurrencyAdaptor(currency).toYoco(),
-                tippingConfig,
-                null, // Not set by integrators
-                paymentParams
+            val paymentParams = com.yoco.payment_ui_sdk.data.params.PaymentParameters(
+                DefaultReceiptDelegate(),
+                null,
+                null,
+                paymentParameters?.receiptNumber,
+                paymentParameters?.billId,
+                paymentParameters?.note,
             )
 
-            // @TODO resolve promise with OnActivityResult
+            try {
+                chargePromise = promise
 
-            promise.resolve(res)
+                YocoSDK.charge(
+                    context = currentActivity,
+                    amountInCents,
+                    PaymentTypeAdaptor(paymentType.toString()).toYoco(),
+                    SupportedCurrencyAdaptor(currency.toString()).toYoco(),
+                    tippingConfig,
+                    null, // Not set by integrators
+                    paymentParams
+                )
+            } catch (e: Exception) {
+                promise.reject(e.toCodedException())
+                throw e
+            }
         }
 
         OnActivityResult { activity, result ->
-            System.err.println("Pairing Activity: Result Code: ${result.resultCode}") // PaymentSDK.Response.ResultCode
-
-            pairTerminalPromise = null
-            chargePromise = null
+            if (result.requestCode == PaymentResultInfo.RequestCode.PAIRING_REQUEST) {
+                onPairTerminalResult(activity, result)
+            } else if (result.requestCode == PaymentResultInfo.RequestCode.CHARGE_REQUEST) {
+                onChargeResult(activity, result)
+            }
         }
+    }
+
+    private fun onPairTerminalResult(activity: Activity, result: OnActivityResultPayload) {
+        val res = ResultCodeAdaptor(result.resultCode)
+
+        if (res.isError()) {
+            pairTerminalPromise?.reject(CodedException(res.get().toString()))
+        } else {
+            pairTerminalPromise?.resolve(res.get())
+        }
+
+        pairTerminalPromise = null
+    }
+
+    private fun onChargeResult(activity: Activity, result: OnActivityResultPayload) {
+        val res = ResultCodeAdaptor(result.resultCode)
+
+        val paymentResult = YocoSDK.paymentResult
+
+        val chargeResult = ChargeResult()
+
+        chargeResult.injectValues(
+            resultCode = res.get(),
+            errorMessage = paymentResult?.errorMessage,
+            amountInCents = paymentResult?.amountInCents,
+            paymentType = PaymentTypeAdaptor(paymentResult?.paymentType.toString()).get(),
+            currency = SupportedCurrencyAdaptor(paymentResult?.currency.toString()).get(),
+            tipInCents = paymentResult?.tipInCents,
+        )
+
+        chargePromise?.resolve(chargeResult)
+
+        chargePromise = null
     }
 }

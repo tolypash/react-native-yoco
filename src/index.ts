@@ -10,27 +10,57 @@ import ReactNativeYocoModule from "./ReactNativeYocoModule";
 import {
   ChangeEventPayload,
   ChargeParams,
+  ChargeResult,
   ConfigureParams,
 } from "./ReactNativeYoco.types";
-import { PaymentType, SupportedCurrency } from "./ReactNativeYocoEnums";
+import {
+  PaymentType,
+  ResultCodes,
+  SupportedCurrency,
+} from "./ReactNativeYocoEnums";
 
+/**
+ * Initialises Yoco SDK
+ * @returns {void}
+ * @throws {Error}
+ */
 export function initialise() {
   return ReactNativeYocoModule.initialise();
 }
 
+/**
+ * Configures Yoco SDK
+ * @param params Configuration parameters
+ * @returns {void}
+ * @throws {Error}
+ */
 export function configure(params: ConfigureParams) {
   return ReactNativeYocoModule.configure(params.secret);
 }
 
+/**
+ * Get device type
+ * @returns {string}
+ */
 export function getDeviceType() {
   return ReactNativeYocoModule.getDeviceType();
 }
 
+/**
+ * Pairs Yoco terminal
+ * @returns {ResultCodes}
+ * @throws {Error} with ResultCodes as message
+ */
 export async function pairTerminal() {
   return await ReactNativeYocoModule.pairTerminal();
 }
 
-export async function charge(params: ChargeParams) {
+/**
+ * Making a payment
+ * @param params
+ * @returns {Promise<ChargeResult>}
+ */
+export async function charge(params: ChargeParams): Promise<ChargeResult> {
   return await ReactNativeYocoModule.charge(
     params.amountInCents,
     params.paymentType,

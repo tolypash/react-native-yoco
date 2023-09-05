@@ -7,13 +7,13 @@ enum class SupportedCurrency(val value: String): Enumerable {
     ZAR("ZAR");
 }
 
-class SupportedCurrencyAdaptor {
+class SupportedCurrencyAdaptor(value: String) {
     private var currency = SupportedCurrency.UNKNOWN
 
-    constructor(value: String) {
+    init {
         this.currency = when (value) {
-            "ZAR" -> SupportedCurrency.ZAR;
-            else -> SupportedCurrency.UNKNOWN;
+            "ZAR" -> SupportedCurrency.ZAR
+            else -> SupportedCurrency.UNKNOWN
         }
     }
 
@@ -27,8 +27,8 @@ class SupportedCurrencyAdaptor {
      */
     fun toYoco(): com.yoco.payment_ui_sdk.data.enums.SupportedCurrency {
         return when (this.currency) {
-            SupportedCurrency.ZAR -> com.yoco.payment_ui_sdk.data.enums.SupportedCurrency.ZAR;
-            else -> com.yoco.payment_ui_sdk.data.enums.SupportedCurrency.ZAR;
+            SupportedCurrency.ZAR -> com.yoco.payment_ui_sdk.data.enums.SupportedCurrency.ZAR
+            else -> com.yoco.payment_ui_sdk.data.enums.SupportedCurrency.ZAR
         }
     }
 }
