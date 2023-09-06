@@ -29,7 +29,13 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      ["../app.plugin.js"]
+      [
+        "expo-gradle-ext-vars",
+        {
+          "yocoDevice": true
+        }
+      ],
+      "../app.plugin.js"
     ]
   }
 }
