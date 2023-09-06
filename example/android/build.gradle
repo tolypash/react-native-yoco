@@ -2,8 +2,8 @@
 
 buildscript {
     ext {
-// @generated begin expo-gradle-ext-vars - expo prebuild (DO NOT MODIFY) sync-9dab8750adea0a3ba3b2772a3acf062f88240a25
-	yocoDevice = true
+// @generated begin expo-gradle-ext-vars - expo prebuild (DO NOT MODIFY) sync-65e881c364ed09b3714e8432b3ead5a4ed012735
+	yocoDevice = false
 // @generated end expo-gradle-ext-vars
         buildToolsVersion = findProperty('android.buildToolsVersion') ?: '33.0.0'
         minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')

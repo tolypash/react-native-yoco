@@ -32,7 +32,7 @@
       [
         "expo-gradle-ext-vars",
         {
-          "yocoDevice": true
+          "yocoDevice": false
         }
       ],
       "../app.plugin.js"

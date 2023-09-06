@@ -17,7 +17,6 @@ import expo.modules.kotlin.exception.toCodedException
 import expo.modules.kotlin.functions.Queues
 import expo.modules.yoco.data.params.PaymentParams
 import expo.modules.yoco.data.params.RefundParams
-import expo.modules.yoco.data.result.ChargeResult
 import expo.modules.yoco.data.result.PaymentResult
 import expo.modules.yoco.data.result.QueryTransactionsResult
 import expo.modules.yoco.enums.*
@@ -124,12 +123,7 @@ class ReactNativeYocoModule : Module() {
                     res.injectValues(
                         resCode.get(),
                         errorMessage,
-                        result?.amountInCents,
-                        PaymentTypeAdaptor(result?.paymentType.toString()).get(),
-                        SupportedCurrencyAdaptor(result?.currency.toString()).get(),
-                        result?.tipInCents,
-                        result?.finalAmountInCents,
-                        result?.clientTransactionId,
+                        result,
                     )
 
                     if (show && resCode.get() == ResultCode.SUCCESSFUL && result != null) {
@@ -156,12 +150,7 @@ class ReactNativeYocoModule : Module() {
                     temp.injectValues(
                         resCode.get(),
                         errorMessage,
-                        transaction.amountInCents,
-                        PaymentTypeAdaptor(transaction.paymentType.toString()).get(),
-                        SupportedCurrencyAdaptor(transaction.currency.toString()).get(),
-                        transaction.tipInCents,
-                        transaction.finalAmountInCents,
-                        transaction.clientTransactionId,
+                        transaction,
                     )
 
                     resList.add(temp)
@@ -221,18 +210,15 @@ class ReactNativeYocoModule : Module() {
 
         val paymentResult = YocoSDK.paymentResult
 
-        val chargeResult = ChargeResult()
+        val res = PaymentResult()
 
-        chargeResult.injectValues(
+        res.injectValues(
             resultCode = resCode.get(),
             errorMessage = paymentResult?.errorMessage,
-            amountInCents = paymentResult?.amountInCents,
-            paymentType = PaymentTypeAdaptor(paymentResult?.paymentType.toString()).get(),
-            currency = SupportedCurrencyAdaptor(paymentResult?.currency.toString()).get(),
-            tipInCents = paymentResult?.tipInCents,
+            paymentResult,
         )
 
-        chargePromise?.resolve(chargeResult)
+        chargePromise?.resolve(res)
 
         chargePromise = null
     }

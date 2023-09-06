@@ -26,30 +26,28 @@ export type ChargeParams = {
   paymentParameters?: PaymentParameters;
 };
 
-export type ChargeResult = {
-  resultCode?: string;
-  errorMessage?: string;
-  amountInCents?: number;
-  paymentType?: PaymentType;
-  currency?: SupportedCurrency;
-  tipInCents?: number;
-};
-
 export type GetPaymentResultParams = {
   transactionId: string;
   /** Show result, success or error (more info: https://developer.yoco.com/in-person/android/show-transaction-result-android) */
   showResult?: boolean;
 };
 
+export type ReceiptInfo = {
+  authorizationCode?: string;
+  transactionTime?: string;
+}
+
 export type PaymentResult = {
   resultCode?: string;
   errorMessage?: string;
   amountInCents?: number;
-  paymentType?: PaymentType;
-  currency?: SupportedCurrency;
   tipInCents?: number;
   finalAmountInCents?: number;
+  paymentType?: PaymentType;
+  currency?: SupportedCurrency;
+  transactionId?: string;
   clientTransactionId?: string;
+  receiptInfo?: ReceiptInfo;
 };
 
 export type QueryTransactionsParams = {

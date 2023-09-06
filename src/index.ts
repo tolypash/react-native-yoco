@@ -10,7 +10,6 @@ import ReactNativeYocoModule from "./ReactNativeYocoModule";
 import {
   ChangeEventPayload,
   ChargeParams,
-  ChargeResult,
   ConfigureParams,
   PaymentResult as PaymentResult,
   GetPaymentResultParams,
@@ -66,7 +65,7 @@ export async function pairTerminal() {
  * @param params
  * @returns {Promise<ChargeResult>}
  */
-export async function charge(params: ChargeParams): Promise<ChargeResult> {
+export async function charge(params: ChargeParams): Promise<PaymentResult> {
   return await ReactNativeYocoModule.charge(
     params.amountInCents,
     params.paymentType,
@@ -114,7 +113,6 @@ export {
   PaymentType,
   SupportedCurrency,
   ChargeParams,
-  ChargeResult,
   PaymentResult,
   ResultCodes,
   QueryTransactionsParams,

@@ -29,7 +29,7 @@ export default function App() {
   const [tipInCentsText, setTipInCentsText] = useState("");
 
   const [chargeResult, setChargeResult] =
-    useState<ReactNativeYoco.ChargeResult>();
+    useState<ReactNativeYoco.PaymentResult>();
   const [chargeLoading, setChargeLoading] = useState(false);
 
   const [paymentResultTransactionIdText, setPaymentResultTransactionIdText] =
