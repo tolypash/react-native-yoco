@@ -116,26 +116,26 @@ class ReactNativeYocoModule : Module() {
 
         AsyncFunction("getPaymentResult") { transactionId: String, show: Boolean, promise: Promise ->
             YocoSDK.getPaymentResult(transactionId) { resultCode, result, errorMessage ->
-                    val resCode = ResultCodeAdaptor(resultCode)
+                val resCode = ResultCodeAdaptor(resultCode)
 
-                    val res = PaymentResult()
+                val res = PaymentResult()
 
-                    res.injectValues(
-                        resCode.get(),
-                        errorMessage,
-                        result,
+                res.injectValues(
+                    resCode.get(),
+                    errorMessage,
+                    result,
+                )
+
+                if (show && resCode.get() == ResultCode.SUCCESSFUL && result != null) {
+                    YocoSDK.showPaymentResult(
+                        context = currentActivity,
+                        paymentResult = result,
+                        params = null,
                     )
-
-                    if (show && resCode.get() == ResultCode.SUCCESSFUL && result != null) {
-                        YocoSDK.showPaymentResult(
-                            context = currentActivity,
-                            paymentResult = result,
-                            params = null,
-                        )
-                    }
-
-                    promise.resolve(res)
                 }
+
+                promise.resolve(res)
+            }
         }.runOnQueue(Queues.MAIN)
 
         AsyncFunction("queryTransactions") { receiptNumber: String, promise: Promise ->
@@ -169,17 +169,17 @@ class ReactNativeYocoModule : Module() {
         AsyncFunction("refund") { _: String, _: RefundParams, promise: Promise ->
             /**
              * @TODO Implement. Issue: refundParams and refundParams.staffMember is noted in docs as optional, but not optional here.
-               val yocoRefundParams = com.yoco.payment_ui_sdk.data.params.RefundParameters(
-                amountInCents = params.amountInCents,
-                staffMember = params.staffMember,
+            val yocoRefundParams = com.yoco.payment_ui_sdk.data.params.RefundParameters(
+            amountInCents = params.amountInCents,
+            staffMember = params.staffMember,
             )
 
             YocoSDK.refund(
-                context = currentActivity,
-                transactionId,
+            context = currentActivity,
+            transactionId,
 
             )
-            */
+             */
 
             promise.reject(CodedException("Not implemented"))
         }
@@ -208,14 +208,12 @@ class ReactNativeYocoModule : Module() {
     private fun onChargeResult(activity: Activity, result: OnActivityResultPayload) {
         val resCode = ResultCodeAdaptor(result.resultCode)
 
-        val paymentResult = YocoSDK.paymentResult
+        val transactionResult = result.data?.getSerializableExtra(PaymentResultInfo.ResultKeys.Transaction) as com.yoco.payment_ui_sdk.data.result.PaymentResult?
 
-        val res = PaymentResult()
-
-        res.injectValues(
+        val res = PaymentResult().injectValues(
             resultCode = resCode.get(),
-            errorMessage = paymentResult?.errorMessage,
-            paymentResult,
+            errorMessage = transactionResult?.errorMessage,
+            paymentResult = transactionResult,
         )
 
         chargePromise?.resolve(res)

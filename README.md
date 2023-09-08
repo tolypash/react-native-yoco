@@ -29,7 +29,7 @@ npx expo install react-native-yoco
 npx expo prebuild
 ```
 
-- If device to be installed is Yoco device, additional dependencies are needed. If you are not installing it on a special Yoco device, please ignore this and the rest of the steps. Install expo-gradle-ext-vars:
+- If your app is to be installed on a Yoco device, additional steps are needed. If you are not installing it on a special Yoco device, please ignore this and the rest of the steps. Install expo-gradle-ext-vars:
 
 ```bash
 npx expo install expo-gradle-ext-vars
@@ -48,6 +48,24 @@ NOTE: the plugin will automatically be added as a plain string. Remove it and re
       ],
 ]
 ```
+
+- For **Android**, there are some issues with dependency versions, therefore you need to add the following in your `app/build.gradle` file, under `android`:
+
+```gradle
+  configurations.all {
+        resolutionStrategy.dependencySubstitution {
+            substitute module('org.bouncycastle:bcprov-jdk15to18:1.70') with module('com.yoco.ono.android:dspreadAndroid:1.23.6')
+            substitute module('org.bouncycastle:bcutil-jdk15to18:1.70') with module('com.yoco.ono.android:dspreadAndroid:1.23.6')
+        }
+
+        if (rootProject.ext.has("yocoDevice") && rootProject.ext.get("yocoDevice")) {
+            resolutionStrategy {
+                force 'io.insert-koin:koin-core:2.0.1'
+            }
+        }
+    }
+```
+
 
 # License
 
