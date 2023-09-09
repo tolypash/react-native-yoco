@@ -9,6 +9,7 @@ This react native module is a wrapper around the native Yoco SDKs for iOS and An
 # Limitations
 
 - Android only (iOS coming soon)
+- Printing and handling receipts is not supported yet
 
 # Requirements
 
@@ -35,11 +36,22 @@ npx expo prebuild
 npx expo install expo-gradle-ext-vars
 ```
 
-- Add the plugin to your app.json with `yocoDevice` set to `true`.
-NOTE: the plugin will automatically be added as a plain string. Remove it and replace it with this:
+- Configure the plugin. `expo-gradle-ext-vars` will automatically be added as a plain string from the installation command above. Replace that string with this array:
+
+```json
+[
+  "expo-gradle-ext-vars",
+  {
+    "yocoDevice": true
+  }
+]
+```
+
+So your plugins should look something like this (if you have other plugins, they will be there too):
 
 ```json
 "plugins": [
+      "react-native-yoco",
       [
         "expo-gradle-ext-vars",
         {
@@ -49,7 +61,7 @@ NOTE: the plugin will automatically be added as a plain string. Remove it and re
 ]
 ```
 
-- For **Android**, there are some issues with dependency versions, therefore you need to add the following in your `app/build.gradle` file, under `android`:
+- For **Android**, assuming you're using latest version of `expo`, there are some issues with dependency versions, therefore you need to add the following in your `app/build.gradle` file, under `android`:
 
 ```gradle
   configurations.all {
