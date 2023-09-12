@@ -70,10 +70,8 @@ So your plugins should look something like this (if you have other plugins, they
             substitute module('org.bouncycastle:bcutil-jdk15to18:1.70') with module('com.yoco.ono.android:dspreadAndroid:1.23.6')
         }
 
-        if (rootProject.ext.has("yocoDevice") && rootProject.ext.get("yocoDevice")) {
-            resolutionStrategy {
-                force 'io.insert-koin:koin-core:2.0.1'
-            }
+        resolutionStrategy {
+            force 'io.insert-koin:koin-core:2.0.1'
         }
     }
 ```
