@@ -109,17 +109,20 @@ dependencies {
 
   implementation "com.yoco:payment-ui:$yoco_sdk_version"
 
+  implementation "com.yoco.ono.common:dspread-android:$ono_sdk_version"
+  implementation "com.yoco.ono.common:miura-android:$ono_sdk_version"
+  implementation "com.yoco.ono.common:datecs-android:$ono_sdk_version"
+  implementation "com.yoco.ono.android:dspreadAndroid:$ono_sdk_version"
+  implementation "com.yoco.ono.android:miuraAndroid:$ono_sdk_version"
+  implementation "com.yoco.ono.android:datecsAndroid:$ono_sdk_version"
+
   if (rootProject.ext.has("yocoDevice") ? rootProject.ext.get("yocoDevice") : false) {
     project.logger.info('Adding Yoco device dependencies')
 
     implementation "com.yoco.ono.common:kozen-android:$ono_sdk_version"
     implementation "com.yoco.ono.android:kozenAndroid:$ono_sdk_version"
-
-    implementation "com.yoco.ono.common:dspread-android:$ono_sdk_version"
-    implementation "com.yoco.ono.common:miura-android:$ono_sdk_version"
-    implementation "com.yoco.ono.common:datecs-android:$ono_sdk_version"
-    implementation "com.yoco.ono.android:dspreadAndroid:$ono_sdk_version"
-    implementation "com.yoco.ono.android:miuraAndroid:$ono_sdk_version"
-    implementation "com.yoco.ono.android:datecsAndroid:$ono_sdk_version"
+  } else {
+    implementation "com.yoco.ono.android:bluetoothAndroid:$ono_sdk_version"
+    implementation "com.yoco.ono.common:bluetooth-android:$ono_sdk_version"
   }
 }
