@@ -10,6 +10,7 @@ This react native module is a wrapper around the native Yoco SDKs for iOS and An
 
 - Android only (iOS coming soon)
 - Printing and handling receipts is not supported yet
+- Only works using physical devices (not simulators)
 
 # Requirements
 
@@ -42,10 +43,15 @@ npx expo install expo-gradle-ext-vars
 [
   "expo-gradle-ext-vars",
   {
-    "yocoDevice": true
+    "yocoDevice": true,
+    "devMode": true
   }
 ]
 ```
+
+`yocoDevice` must be set to `true` if you are installing on a [Yoco device](https://www.yoco.com/za/card-machines/)
+
+`devMode` must be set to `true` if you will be running app with `npx expo run:android` (because that includes the dependency `expo-dev-launcher`, and there is a version issue with it).
 
 So your plugins should look something like this (if you have other plugins, they will be there too):
 
@@ -55,7 +61,8 @@ So your plugins should look something like this (if you have other plugins, they
       [
         "expo-gradle-ext-vars",
         {
-          "yocoDevice": true
+          "yocoDevice": true,
+          "devMode": true
         }
       ],
 ]
@@ -70,8 +77,10 @@ So your plugins should look something like this (if you have other plugins, they
             substitute module('org.bouncycastle:bcutil-jdk15to18:1.70') with module('com.yoco.ono.android:dspreadAndroid:1.23.6')
         }
 
-        resolutionStrategy {
-            force 'io.insert-koin:koin-core:2.0.1'
+        if (rootProject.ext.has("devMode") ? !rootProject.ext.get("devMode") : false) {
+            resolutionStrategy {
+                force 'io.insert-koin:koin-core:2.0.1'
+            }
         }
     }
 ```

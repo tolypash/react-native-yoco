@@ -35,14 +35,6 @@ class ReactNativeYocoModule : Module() {
         // Sets the name of the module that JavaScript code will use to refer to the module.
         Name("ReactNativeYoco")
 
-        // Sets constant properties on the module.
-        Constants(
-            "PI" to Math.PI
-        )
-
-        // Defines event names that the module can send to JavaScript.
-        Events("onChange")
-
         Function("initialise") {
             // Initialises Yoco Payment UI SDK
             YocoSDK.initialise(
