@@ -1,4 +1,5 @@
 import ExpoModulesCore
+import YocoSDK
 
 public class ReactNativeYocoModule: Module {
   public func definition() -> ModuleDefinition {
@@ -6,13 +7,13 @@ public class ReactNativeYocoModule: Module {
     Name("ReactNativeYoco")
 
     Function("initialise") {
-
-    }
-    
-    Function("configure") {
-
+        Yoco.initialise();
     }
 
+    Function("configure") { (secret: String) in
+        Yoco.configure(secret: secret, loggingEnabled: true, environment: .production)
+    }
+      
     Function("getDeviceType") {
 
     }
@@ -32,9 +33,9 @@ public class ReactNativeYocoModule: Module {
     AsyncFunction("queryTransactions") {
 
     }
-    
+
     AsyncFunction("refund") {
-      
+
     }
   }
 }

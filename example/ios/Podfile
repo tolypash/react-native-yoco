@@ -75,6 +75,22 @@ target 'reactnativeyocoexample' do
         end
       end
     end
+
+    # This overrides YocoSDK deployment target to make it compatible
+    # with expo modules
+    installer.pods_project.targets.each do |target|
+      if target.name == 'YocoSDK'
+        target.build_configurations.each do |config|
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+        end
+      end
+    end
+
+    # This is required for YocoSDK as it doesn't support build on Apple Silicon
+    # see https://gitlab.com/yoco-public/yoco-sdk-mobile-ios/-/issues/1
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+    end
   end
 
   post_integrate do |installer|

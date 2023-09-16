@@ -269,10 +269,24 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-reactnativeyocoexample/Pods-reactnativeyocoexample-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/YocoSDK/YocoSDK.framework/YocoSDK",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/YocoSDK/OnoSDK.framework/OnoSDK",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/YocoSDK/Ono.framework/Ono",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/YocoSDK/YCLottie.framework/YCLottie",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/YocoSDK/YCSwiftSignatureView.framework/YCSwiftSignatureView",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/YocoSDK/YCReSwift.framework/YCReSwift",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/YocoSDK/YCGloss.framework/YCGloss",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YocoSDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OnoSDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Ono.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YCLottie.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YCSwiftSignatureView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YCReSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YCGloss.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -360,7 +374,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = expo.modules.yoco.example;
-				PRODUCT_NAME = "reactnativeyocoexample";
+				PRODUCT_NAME = reactnativeyocoexample;
 				SWIFT_OBJC_BRIDGING_HEADER = "reactnativeyocoexample/reactnativeyocoexample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -388,7 +402,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = expo.modules.yoco.example;
-				PRODUCT_NAME = "reactnativeyocoexample";
+				PRODUCT_NAME = reactnativeyocoexample;
 				SWIFT_OBJC_BRIDGING_HEADER = "reactnativeyocoexample/reactnativeyocoexample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

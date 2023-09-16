@@ -447,9 +447,13 @@ PODS:
     - React-jsi (= 0.72.4)
     - React-logger (= 0.72.4)
     - React-perflogger (= 0.72.4)
-  - ReactNativeYoco (0.1.0):
+  - ReactNativeYoco (0.1.5):
     - ExpoModulesCore
+    - YocoSDK
+  - RNPermissions (3.9.0):
+    - React-Core
   - SocketRocket (0.6.1)
+  - YocoSDK (4.13.9)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -502,6 +506,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeYoco (from `../../ios`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -509,6 +514,7 @@ SPEC REPOS:
     - fmt
     - libevent
     - SocketRocket
+    - YocoSDK
 
 EXTERNAL SOURCES:
   boost:
@@ -606,6 +612,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeYoco:
     :path: "../../ios"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -658,10 +666,12 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 4941cc1b3cf08b792fbf666342c9fc95f1969035
   React-utils: b79f2411931f9d3ea5781404dcbb2fa8a837e13a
   ReactCommon: 4b2bdcb50a3543e1c2b2849ad44533686610826d
-  ReactNativeYoco: c68b53e744530ae2dd78da0070c70e13447ff1ab
+  ReactNativeYoco: d2c077ab186f97f250fe65a1361e2091b5096912
+  RNPermissions: 2e68b2e82a93ad09327dee8822846fead91ca3ad
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  YocoSDK: 8e086d458a68b7159eb260c2329879cf8dd04f95
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
 
-PODFILE CHECKSUM: fcee17306e1845ccc48b457822de154f35bd7a60
+PODFILE CHECKSUM: 709120eedde8d063c00bfac1c1ab35547489494f
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
