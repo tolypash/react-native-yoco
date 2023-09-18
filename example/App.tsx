@@ -84,11 +84,23 @@ export default function App() {
               if (Platform.OS === "android") {
                 await request(PERMISSIONS.ANDROID.BLUETOOTH_CONNECT);
                 await request(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
+                await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+                await request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION);
 
                 console.log(await check(PERMISSIONS.ANDROID.BLUETOOTH_CONNECT));
                 console.log(await check(PERMISSIONS.ANDROID.BLUETOOTH_SCAN));
+                console.log(
+                  await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+                );
+                console.log(
+                  await check(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
+                );
               } else if (Platform.OS === "ios") {
                 await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
+                await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+
+                console.log(await check(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL));
+                console.log(await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE));
               }
             }}
           />
