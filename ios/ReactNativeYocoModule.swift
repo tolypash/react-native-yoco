@@ -34,7 +34,7 @@ public class ReactNativeYocoModule: Module {
             }
         }
         
-        AsyncFunction("charge") { (amountInCents: UInt64, paymentType: String, currency: String, tipInCents: Int32?, paymentParameters: PaymentParametersArgument?) in {
+        AsyncFunction("charge") { (amountInCents: UInt64, paymentType: String, currency: String, tipInCents: Int32?, paymentParameters: PaymentParametersArgument?, promise: Promise) in
             var tippingConfig: TippingConfig = .DO_NOT_ASK_FOR_TIP
             let parameters = PaymentParameters(
                 autoTransition: false,
@@ -62,9 +62,17 @@ public class ReactNativeYocoModule: Module {
                     tippingConfig: tippingConfig,
                     printerConfig: nil,
                     parameters: parameters
-                )
+                ) { paymentResult in
+                    switch paymentResult.result {
+                    case .success:
+                        promise.resolve(paymentResult)
+                        break
+                    default: // all failure cases
+                        promise.reject("charge-error", "\(paymentResult.result)")
+                        break
+                    }
+                }
             }
-        }
         }
         
         AsyncFunction("getPaymentResult") {
