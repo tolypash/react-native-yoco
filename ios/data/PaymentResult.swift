@@ -48,18 +48,21 @@ struct PaymentResult: Record {
 
     @Field
     var receiptInfo: [String : Any]? = nil
+    
+    init(code: ResultCodeEnum) {
+        self.resultCode = code.rawValue
+    }
 
-    init(paymentResult: YocoSDK.PaymentResult) {
-        if let paymentType = paymentResult.paymentType {
+    init(result: YocoSDK.PaymentResult) {
+        self.resultCode = ResultCodeAdapter(result.result).get().rawValue
+        self.currency = CurrencyAdapter("\(result.currency)").get().rawValue
+        if let paymentType = result.paymentType {
             self.paymentType = PaymentTypeAdapter("\(paymentType)").get().rawValue
         }
-
-        self.currency = CurrencyAdapter("\(paymentResult.currency)").get().rawValue
-        self.resultCode = ResultCodeAdapter(paymentResult.result).get().rawValue
-        self.amountInCents = paymentResult.amountInCents
-        self.tipInCents = paymentResult.tipInCents
-        self.finalAmountInCents = paymentResult.finalAmountInCents
-        self.transactionId = paymentResult.transactionID
-        self.receiptInfo = ReceiptInfo(receiptInfo: paymentResult.receiptInfo).toDictionary()
+        self.amountInCents = result.amountInCents
+        self.tipInCents = result.tipInCents
+        self.finalAmountInCents = result.finalAmountInCents
+        self.transactionId = result.transactionID
+        self.receiptInfo = ReceiptInfo(receiptInfo: result.receiptInfo).toDictionary()
     }
 }

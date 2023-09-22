@@ -18,8 +18,9 @@ public class ReactNativeYocoModule: Module {
             }
         }
         
-        Function("getDeviceType") {
-            
+        // No equivalent YocoSDK API
+        Function("getDeviceType") { () -> String? in
+            return nil
         }
         
         AsyncFunction("pairTerminal") {
@@ -57,13 +58,32 @@ public class ReactNativeYocoModule: Module {
                     printerConfig: nil,
                     parameters: parameters
                 ) { paymentResult in
-                    promise.resolve(PaymentResult(paymentResult: paymentResult).toDictionary())
+                    let res = PaymentResult(result: paymentResult)
+                    promise.resolve(res.toDictionary())
                 }
             }
         }
         
-        AsyncFunction("getPaymentResult") {
-            
+        AsyncFunction("getPaymentResult") { (transactionId: String, show: Bool, promise: Promise) in
+            DispatchQueue.main.async {
+                Yoco.getPaymentResult(transactionID: transactionId) { paymentResult, error in
+                    if let paymentResult {
+                        let resultCode = ResultCodeAdapter(paymentResult.result).get()
+                        
+                        if show, case .SUCCESSFUL = resultCode {
+                            Yoco.showPaymentResult(paymentResult)
+                        }
+                        
+                        let res = PaymentResult(result: paymentResult)
+                        promise.resolve(res.toDictionary())
+                    }
+                    
+                    if let error {
+                        let res = PaymentResult(code: ResultCodeEnum.ERROR_TRANSACTION_LOOKUP_FAILED)
+                        promise.resolve(res.toDictionary())
+                    }
+                }
+            }
         }
         
         AsyncFunction("queryTransactions") {
