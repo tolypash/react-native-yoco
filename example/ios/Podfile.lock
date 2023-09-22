@@ -450,6 +450,8 @@ PODS:
   - ReactNativeYoco (0.1.5):
     - ExpoModulesCore
     - YocoSDK
+  - RNCClipboard (1.11.2):
+    - React-Core
   - RNPermissions (3.9.0):
     - React-Core
   - SocketRocket (0.6.1)
@@ -506,6 +508,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeYoco (from `../../ios`)
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -612,6 +615,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeYoco:
     :path: "../../ios"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   Yoga:
@@ -667,6 +672,7 @@ SPEC CHECKSUMS:
   React-utils: b79f2411931f9d3ea5781404dcbb2fa8a837e13a
   ReactCommon: 4b2bdcb50a3543e1c2b2849ad44533686610826d
   ReactNativeYoco: d2c077ab186f97f250fe65a1361e2091b5096912
+  RNCClipboard: 3f0451a8100393908bea5c5c5b16f96d45f30bfc
   RNPermissions: 1378b287bddeba5fd984372784f9a26ea5591f10
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   YocoSDK: 8e086d458a68b7159eb260c2329879cf8dd04f95
