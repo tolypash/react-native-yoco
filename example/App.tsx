@@ -11,9 +11,11 @@ import {
   View,
   ScrollView,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import JSONTree from "react-native-json-tree";
 import { request, check, PERMISSIONS } from "react-native-permissions";
+import { useClipboard } from "@react-native-clipboard/clipboard";
 import config from "./config.json";
 
 import * as ReactNativeYoco from "react-native-yoco";
@@ -21,6 +23,8 @@ import * as ReactNativeYoco from "react-native-yoco";
 const LOGO_DIMENSIONS = { width: 651, height: 286 };
 
 export default function App() {
+  const [, setToClipboard] = useClipboard();
+
   const [secret, setSecret] = useState(config?.secret || "");
 
   const [pairTerminalLoading, setPairTerminalLoading] = useState(false);
@@ -44,6 +48,10 @@ export default function App() {
     useState<ReactNativeYoco.QueryTransactionsResult>();
   const [queryTransactionsLoading, setQueryTransactionsLoading] =
     useState(false);
+
+  function copyData(data: object) {
+    setToClipboard(JSON.stringify(data, null, 4));
+  }
 
   return (
     <ScrollView
@@ -179,8 +187,17 @@ export default function App() {
             onChangeText={setTipInCentsText}
           />
 
-          <View style={{ width: "100%" }}>
-            <JSONTree data={chargeResult || {}} />
+          <View style={styles.resultContainer}>
+            <View style={styles.flex}>
+              <JSONTree data={chargeResult || {}} />
+            </View>
+            <TouchableOpacity
+              style={styles.copyButton}
+              onPress={() => copyData(chargeResult!)}
+              disabled={!chargeResult}
+            >
+              <Text style={styles.copyText}>Copy</Text>
+            </TouchableOpacity>
           </View>
 
           <Button
@@ -243,8 +260,18 @@ export default function App() {
             onChangeText={setPaymentResultTransactionIdText}
           />
 
-          <View style={{ width: "100%" }}>
-            <JSONTree data={paymentResult || {}} />
+          <View style={styles.resultContainer}>
+            <View style={styles.flex}>
+              <JSONTree data={paymentResult || {}} />
+            </View>
+
+            <TouchableOpacity
+              style={styles.copyButton}
+              onPress={() => copyData(paymentResult!)}
+              disabled={!paymentResult}
+            >
+              <Text style={styles.copyText}>Copy</Text>
+            </TouchableOpacity>
           </View>
 
           <Button
@@ -300,8 +327,18 @@ export default function App() {
             }}
           />
 
-          <View style={{ width: "100%" }}>
-            <JSONTree data={queryTransactionsResult || {}} />
+          <View style={styles.resultContainer}>
+            <View style={styles.flex}>
+              <JSONTree data={queryTransactionsResult || {}} />
+            </View>
+
+            <TouchableOpacity
+              style={styles.copyButton}
+              onPress={() => copyData(queryTransactionsResult!)}
+              disabled={!queryTransactionsResult}
+            >
+              <Text style={styles.copyText}>Copy</Text>
+            </TouchableOpacity>
           </View>
 
           <Button
@@ -335,11 +372,33 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   scrollContainer: {
     backgroundColor: "#fff",
   },
   container: {
     flex: 1,
     alignItems: "center",
+  },
+  resultContainer: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  copyButton: {
+    position: "absolute",
+    right: 0,
+    width: 64,
+    height: 32,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "limegreen",
+    overflow: "hidden",
+  },
+  copyText: {
+    color: "white",
   },
 });
