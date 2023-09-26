@@ -86,8 +86,34 @@ public class ReactNativeYocoModule: Module {
             }
         }
         
-        AsyncFunction("queryTransactions") {
-            
+        AsyncFunction("queryTransactions") { (receiptNumber: String, promise: Promise) in
+            DispatchQueue.main.async {
+                Yoco.getIntegratorTransactions(receiptNumber: receiptNumber) { (transactions, error) in
+                    if let transactions {
+                        var resList: [PaymentResult] = []
+                        
+                        transactions.forEach { transaction in
+                            resList.append(PaymentResult(result: transaction))
+                        }
+                        
+                        let res = QueryTransactionsResult(
+                            resultCode: ResultCodeEnum.SUCCESSFUL,
+                            errorMessage: nil,
+                            transactions: resList
+                        )
+                        promise.resolve(res.toDictionary())
+                    }
+                    
+                    if let error {
+                        let res = QueryTransactionsResult(
+                            resultCode: ResultCodeEnum.ERROR_TRANSACTION_LOOKUP_FAILED,
+                            errorMessage: nil,
+                            transactions: nil
+                        )
+                        promise.resolve(res.toDictionary())
+                    }
+                }
+            }
         }
         
         AsyncFunction("refund") {
