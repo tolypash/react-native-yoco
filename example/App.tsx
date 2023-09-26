@@ -57,6 +57,7 @@ export default function App() {
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
       style={styles.scrollContainer}
+      contentContainerStyle={{ paddingBottom: 500 }}
     >
       <SafeAreaView style={styles.container}>
         <Image
