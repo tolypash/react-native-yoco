@@ -1,7 +1,7 @@
-
 ![yoco-react-native-banner](https://github.com/tolypash/react-native-yoco/assets/22174779/1fac2b8c-7750-4a27-a64b-238634747092)
 
 # React Native Yoco
+
 The Yoco SDK allows app developers to integrate with Yoco card machines to accept in-person payments from within their application. The most common scenario is to accept Yoco payments from within your Point of Sale application.
 
 This react native module is a wrapper around the native Yoco SDKs for iOS and Android, powered by **Expo Modules**.
@@ -24,6 +24,9 @@ This react native module is a wrapper around the native Yoco SDKs for iOS and An
 ```bash
 npx expo install react-native-yoco
 ```
+
+- YocoSDK requires several permissions for [iOS](https://developer.yoco.com/in-person/ios/getting-started) and [Android](https://developer.yoco.com/in-person/android/initialise-android).
+  You can install [react-native-permissions](https://github.com/zoontek/react-native-permissions) and follow docs to setup needed permissions
 
 - Run prebuild script:
 
@@ -68,7 +71,9 @@ So your plugins should look something like this (if you have other plugins, they
 ]
 ```
 
-- For **Android**, assuming you're using latest version of `expo`, there are some issues with dependency versions, therefore you need to add the following in your `app/build.gradle` file, under `android`:
+## Android
+
+- Assuming you're using latest version of `expo`, there are some issues with dependency versions, therefore you need to add the following in your `app/build.gradle` file, under `android`:
 
 ```gradle
   configurations.all {
@@ -85,6 +90,29 @@ So your plugins should look something like this (if you have other plugins, they
     }
 ```
 
+## iOS
+
+- You need to add the following in your Podfile, under ios:
+
+```ruby
+  post_install do |installer|
+    # This overrides YocoSDK deployment target to make it compatible
+    # with expo modules
+    installer.pods_project.targets.each do |target|
+      if target.name == 'YocoSDK'
+        target.build_configurations.each do |config|
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+        end
+      end
+    end
+
+    # This is needed for Apple Silicon
+    # see https://gitlab.com/yoco-public/yoco-sdk-mobile-ios/-/issues/1
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+    end
+  end
+```
 
 # License
 
