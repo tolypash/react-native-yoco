@@ -14,7 +14,20 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "expo.modules.yoco.example"
+      "bundleIdentifier": "expo.modules.yoco.example",
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "App needs Bluetooth enabled to communicate with your Yoco card machine.",
+        "NSBluetoothPeripheralUsageDescription": "App needs Bluetooth enabled to communicate with your Yoco card machine.",
+        "NSLocationWhenInUseUsageDescription": "App needs your location for transaction security purposes.",
+        "UISupportedExternalAccessoryProtocols": [
+          "com.miura.shuttle",
+          "com.miura.rpi"
+        ],
+        "UIBackgroundModes": [
+          "bluetooth-central", 
+          "external-accessory"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {

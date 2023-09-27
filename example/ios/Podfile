@@ -1,5 +1,6 @@
 require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 require File.join(File.dirname(`node --print "require.resolve('react-native/package.json')"`), "scripts/react_native_pods")
+require_relative '../node_modules/react-native-permissions/scripts/setup'
 
 require 'json'
 podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties.json'))) rescue {}
@@ -12,6 +13,11 @@ install! 'cocoapods',
   :deterministic_uuids => false
 
 prepare_react_native_project!
+
+setup_permissions([
+  'BluetoothPeripheral',
+  'LocationWhenInUse',
+])
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...), which will be excluded. To fix this,
@@ -74,6 +80,22 @@ target 'reactnativeyocoexample' do
           config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         end
       end
+    end
+
+    # This overrides YocoSDK deployment target to make it compatible
+    # with expo modules
+    installer.pods_project.targets.each do |target|
+      if target.name == 'YocoSDK'
+        target.build_configurations.each do |config|
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+        end
+      end
+    end
+
+    # This is required for YocoSDK as it doesn't support build on Apple Silicon
+    # see https://gitlab.com/yoco-public/yoco-sdk-mobile-ios/-/issues/1
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
     end
   end
 

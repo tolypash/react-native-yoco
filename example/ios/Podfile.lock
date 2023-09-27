@@ -449,11 +449,13 @@ PODS:
     - React-perflogger (= 0.72.4)
   - ReactNativeYoco (0.1.5):
     - ExpoModulesCore
+    - YocoSDK
   - RNCClipboard (1.11.2):
     - React-Core
   - RNPermissions (3.9.0):
     - React-Core
   - SocketRocket (0.6.1)
+  - YocoSDK (4.13.9)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -515,6 +517,7 @@ SPEC REPOS:
     - fmt
     - libevent
     - SocketRocket
+    - YocoSDK
 
 EXTERNAL SOURCES:
   boost:
@@ -668,12 +671,13 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 4941cc1b3cf08b792fbf666342c9fc95f1969035
   React-utils: b79f2411931f9d3ea5781404dcbb2fa8a837e13a
   ReactCommon: 4b2bdcb50a3543e1c2b2849ad44533686610826d
-  ReactNativeYoco: 517a46c0f10b37cc21c3d70aa401c1f6d4a3047a
+  ReactNativeYoco: d2c077ab186f97f250fe65a1361e2091b5096912
   RNCClipboard: 3f0451a8100393908bea5c5c5b16f96d45f30bfc
   RNPermissions: 1378b287bddeba5fd984372784f9a26ea5591f10
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  YocoSDK: 8e086d458a68b7159eb260c2329879cf8dd04f95
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
 
-PODFILE CHECKSUM: fcee17306e1845ccc48b457822de154f35bd7a60
+PODFILE CHECKSUM: 7f261337ddf3210fc674be2f1934973775f83793
 
 COCOAPODS: 1.12.1

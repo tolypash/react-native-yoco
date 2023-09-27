@@ -48,6 +48,17 @@
         </dict>
       </dict>
     </dict>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>App needs Bluetooth enabled to communicate with your Yoco card machine.</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>App needs Bluetooth enabled to communicate with your Yoco card machine.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>App needs your location for transaction security purposes.</string>
+    <key>UIBackgroundModes</key>
+    <array>
+      <string>bluetooth-central</string>
+      <string>external-accessory</string>
+    </array>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
@@ -58,6 +69,11 @@
     <false/>
     <key>UIStatusBarStyle</key>
     <string>UIStatusBarStyleDefault</string>
+    <key>UISupportedExternalAccessoryProtocols</key>
+    <array>
+      <string>com.miura.shuttle</string>
+      <string>com.miura.rpi</string>
+    </array>
     <key>UISupportedInterfaceOrientations</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>
