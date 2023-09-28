@@ -35,7 +35,7 @@ export type GetPaymentResultParams = {
 export type ReceiptInfo = {
   authorizationCode?: string;
   transactionTime?: string;
-}
+};
 
 export type PaymentResult = {
   resultCode?: string;
@@ -60,10 +60,16 @@ export type QueryTransactionsResult = {
   transactions?: PaymentResult[];
 };
 
+export type StaffMember = {
+  name: string; // Name of the staff member who is initiating the payment.
+  staffNumber: number; // A unique identifier for the staff member.
+};
+
 export type RefundParams = {
   transactionId: string;
-  amountInCents: number;
-  userInfo?: Record<string, any>;
+  amountInCents: number; // An amount in cents to be refunded of the full amount
+  userInfo?: Record<string, any>; // Store data you would like to receive back on completion of the payment. This data only exists locally.
+  staffMember?: StaffMember; // A staff member object that can be used to assign staff member meta data to the transaction.
 };
 
 export type RefundResult = PaymentResult & {};

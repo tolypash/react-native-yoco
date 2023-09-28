@@ -84,11 +84,15 @@ export async function getPaymentResult(
   );
 }
 
-/** @TODO Implement */
 export async function refund(
-  _params: RefundParams
+  params: RefundParams
 ): Promise<RefundResult | undefined> {
-  throw new Error("Not implemented");
+  return await ReactNativeYocoModule.refund(
+    params.transactionId,
+    params.amountInCents,
+    params?.userInfo,
+    params?.staffMember
+  );
 }
 
 export async function queryTransactions(
