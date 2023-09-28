@@ -8,7 +8,6 @@ This react native module is a wrapper around the native Yoco SDKs for iOS and An
 
 # Limitations
 
-- Android only (iOS coming soon)
 - Printing and handling receipts is not supported yet
 - Only works using physical devices (not simulators)
 
