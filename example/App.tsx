@@ -49,6 +49,12 @@ export default function App() {
   const [queryTransactionsLoading, setQueryTransactionsLoading] =
     useState(false);
 
+  const [refundTransactionIdText, setRefundTransactionIdText] = useState("");
+  const [refundAmountText, setRefundAmountText] = useState("");
+  const [refundResult, setRefundResult] =
+    useState<ReactNativeYoco.PaymentResult>();
+  const [refundLoading, setRefundLoading] = useState(false);
+
   function copyData(data: object) {
     setToClipboard(JSON.stringify(data, null, 4));
   }
@@ -375,6 +381,81 @@ export default function App() {
                 console.error(e);
               } finally {
                 setQueryTransactionsLoading(false);
+              }
+            }}
+          />
+        </View>
+
+        <View
+          style={{
+            width: "100%",
+            borderColor: "lightgray",
+            borderTopWidth: 1,
+            borderBottomWidth: 1,
+            alignItems: "center",
+            marginVertical: 10,
+            paddingVertical: 10,
+            rowGap: 10,
+          }}
+        >
+          <TextInput
+            placeholder="Input Transaction ID"
+            style={{
+              width: "90%",
+              marginVertical: 10,
+            }}
+            value={refundTransactionIdText}
+            onChangeText={setRefundTransactionIdText}
+          />
+
+          <TextInput
+            placeholder="Input Refund amount in cents"
+            style={{
+              width: "90%",
+              marginVertical: 10,
+            }}
+            value={refundAmountText}
+            onChangeText={setRefundAmountText}
+          />
+
+          <View style={styles.resultContainer}>
+            <View style={styles.flex}>
+              <JSONTree data={refundResult || {}} />
+            </View>
+
+            <TouchableOpacity
+              style={styles.copyButton}
+              onPress={() => copyData(refundResult!)}
+              disabled={!refundResult}
+            >
+              <Text style={styles.copyText}>Copy</Text>
+            </TouchableOpacity>
+          </View>
+
+          <Button
+            title={"Refund" + (refundLoading ? " (loading...)" : "")}
+            onPress={async () => {
+              try {
+                setRefundLoading(true);
+
+                const refundAmount = Number(refundAmountText);
+
+                if (isNaN(refundAmount)) {
+                  throw new Error("Invalid refund amount");
+                }
+
+                const res = await ReactNativeYoco.refund({
+                  transactionId: refundTransactionIdText,
+                  amountInCents: refundAmount,
+                });
+
+                console.log(res);
+
+                setRefundResult(res);
+              } catch (e) {
+                console.error(e);
+              } finally {
+                setRefundLoading(false);
               }
             }}
           />

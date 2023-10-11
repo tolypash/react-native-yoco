@@ -31,7 +31,7 @@ public class ReactNativeYocoModule: Module {
         
         AsyncFunction("charge") { (amountInCents: UInt64, paymentType: String, currency: String, tipInCents: Int32?, paymentParameters: PaymentParams?, promise: Promise) in
             DispatchQueue.main.async {
-                var tippingConfig: TippingConfig = .DO_NOT_ASK_FOR_TIP
+                var tippingConfig: YocoSDK.TippingConfig = .DO_NOT_ASK_FOR_TIP
                 let parameters = PaymentParameters(
                     autoTransition: false,
                     receiptDelegate: nil,
@@ -116,8 +116,29 @@ public class ReactNativeYocoModule: Module {
             }
         }
         
-        AsyncFunction("refund") {
-            
+        AsyncFunction("refund") { (transactionId: String, amountInCents: Int64, userInfo: [AnyHashable: Any]?, staffMember: StaffMember?, promise: Promise) in
+            DispatchQueue.main.async {
+                var staff: YocoSDK.YocoStaff? = nil
+                
+                if let staffMember {
+                    staff = YocoSDK.YocoStaff(
+                        staffNumber: staffMember.staffNumber,
+                        name: staffMember.name
+                    )
+                }
+                
+                let parameters = YocoSDK.RefundParameters(
+                    amountInCents: amountInCents,
+                    receiptDelegate: nil,
+                    userInfo: userInfo,
+                    staffMember: staff
+                )
+                
+                Yoco.refund(transactionID: transactionId, parameters: parameters) { (paymentResult) in
+                    let res = PaymentResult(result: paymentResult)
+                    promise.resolve(res.toDictionary())
+                }
+            }
         }
     }
 }

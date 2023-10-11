@@ -5,10 +5,14 @@ import android.content.Context
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import com.yoco.payment_ui_sdk.YocoSDK
+import com.yoco.payment_ui_sdk.data.YocoStaff
 import com.yoco.payment_ui_sdk.data.delegates.DefaultReceiptDelegate
 import com.yoco.payment_ui_sdk.data.enums.SDKEnvironment
-import com.yoco.payment_ui_sdk.data.params.TippingConfig
-import com.yoco.payment_ui_sdk.data.result.PaymentResultInfo
+import com.yoco.payment_ui_sdk.data.params.RefundParameters as YocoRefundParameters
+import com.yoco.payment_ui_sdk.data.params.TippingConfig as YocoTippingConfig
+import com.yoco.payment_ui_sdk.data.result.PaymentResultInfo as YocoPaymentResultInfo
+import com.yoco.payment_ui_sdk.data.params.PaymentParameters as YocoPaymentParameters
+import com.yoco.payment_ui_sdk.data.result.PaymentResult as YocoPaymentResult
 import expo.modules.kotlin.Promise
 import expo.modules.kotlin.events.OnActivityResultPayload
 import expo.modules.kotlin.exception.CodedException
@@ -16,7 +20,7 @@ import expo.modules.kotlin.exception.Exceptions
 import expo.modules.kotlin.exception.toCodedException
 import expo.modules.kotlin.functions.Queues
 import expo.modules.yoco.data.params.PaymentParams
-import expo.modules.yoco.data.params.RefundParams
+import expo.modules.yoco.data.params.StaffMember
 import expo.modules.yoco.data.result.PaymentResult
 import expo.modules.yoco.data.result.QueryTransactionsResult
 import expo.modules.yoco.enums.*
@@ -30,6 +34,7 @@ class ReactNativeYocoModule : Module() {
 
     private var pairTerminalPromise : Promise? = null
     private var chargePromise : Promise? = null
+    private var refundPromise : Promise? = null
 
     override fun definition() = ModuleDefinition {
         // Sets the name of the module that JavaScript code will use to refer to the module.
@@ -74,12 +79,12 @@ class ReactNativeYocoModule : Module() {
 
         AsyncFunction("charge") { amountInCents: Long, paymentType: PaymentType, currency: SupportedCurrency, tipInCents: Int?, paymentParameters: PaymentParams?, promise: Promise ->
             val tippingConfig = when (tipInCents) {
-                null -> TippingConfig.DO_NOT_ASK_FOR_TIP
-                0 -> TippingConfig.ASK_FOR_TIP_ON_CARD_MACHINE
-                else -> TippingConfig.INCLUDE_TIP_IN_AMOUNT(tipInCents)
+                null -> YocoTippingConfig.DO_NOT_ASK_FOR_TIP
+                0 -> YocoTippingConfig.ASK_FOR_TIP_ON_CARD_MACHINE
+                else -> YocoTippingConfig.INCLUDE_TIP_IN_AMOUNT(tipInCents)
             }
 
-            val paymentParams = com.yoco.payment_ui_sdk.data.params.PaymentParameters(
+            val paymentParams = YocoPaymentParameters(
                 DefaultReceiptDelegate(),
                 null,
                 null,
@@ -158,29 +163,46 @@ class ReactNativeYocoModule : Module() {
             }
         }.runOnQueue(Queues.MAIN)
 
-        AsyncFunction("refund") { _: String, _: RefundParams, promise: Promise ->
-            /**
-             * @TODO Implement. Issue: refundParams and refundParams.staffMember is noted in docs as optional, but not optional here.
-            val yocoRefundParams = com.yoco.payment_ui_sdk.data.params.RefundParameters(
-            amountInCents = params.amountInCents,
-            staffMember = params.staffMember,
+        AsyncFunction("refund") { transactionId: String, amountInCents: Long, userInfo: Map<String, Any>?, staffMember: StaffMember?,  promise: Promise ->
+            val staff = YocoStaff(
+                staffMember?.name ?: "",
+                staffMember?.staffNumber ?: ""
             )
 
-            YocoSDK.refund(
-            context = currentActivity,
-            transactionId,
-
+            val parameters = YocoRefundParameters(
+                amountInCents,
+                staff, // Required here, despite being optional in the docs
+                DefaultReceiptDelegate(),
+                userInfo,
+                null,
             )
-             */
 
-            promise.reject(CodedException("Not implemented"))
-        }
+            try {
+                refundPromise = promise
+
+                YocoSDK.refund(
+                    context = currentActivity,
+                    transactionId,
+                    parameters,
+                    null,
+                )
+            } catch (e: Exception) {
+                promise.reject(e.toCodedException())
+                throw e
+            }
+        }.runOnQueue(Queues.MAIN)
 
         OnActivityResult { activity, result ->
-            if (result.requestCode == PaymentResultInfo.RequestCode.PAIRING_REQUEST) {
-                onPairTerminalResult(activity, result)
-            } else if (result.requestCode == PaymentResultInfo.RequestCode.CHARGE_REQUEST) {
-                onChargeResult(activity, result)
+            when (result.requestCode) {
+                YocoPaymentResultInfo.RequestCode.PAIRING_REQUEST -> {
+                    onPairTerminalResult(activity, result)
+                }
+                YocoPaymentResultInfo.RequestCode.CHARGE_REQUEST -> {
+                    onChargeResult(activity, result)
+                }
+                YocoPaymentResultInfo.RequestCode.REFUND_REQUEST -> {
+                    onRefundResult(activity, result)
+                }
             }
         }
     }
@@ -200,7 +222,7 @@ class ReactNativeYocoModule : Module() {
     private fun onChargeResult(activity: Activity, result: OnActivityResultPayload) {
         val resCode = ResultCodeAdaptor(result.resultCode)
 
-        val transactionResult = result.data?.getSerializableExtra(PaymentResultInfo.ResultKeys.Transaction) as com.yoco.payment_ui_sdk.data.result.PaymentResult?
+        val transactionResult = result.data?.getSerializableExtra(YocoPaymentResultInfo.ResultKeys.Transaction) as YocoPaymentResult?
 
         val res = PaymentResult().injectValues(
             resultCode = resCode.get(),
@@ -211,5 +233,21 @@ class ReactNativeYocoModule : Module() {
         chargePromise?.resolve(res)
 
         chargePromise = null
+    }
+
+    private fun onRefundResult(activity: Activity, result: OnActivityResultPayload) {
+        val resCode = ResultCodeAdaptor(result.resultCode)
+
+        val transactionResult = result.data?.getSerializableExtra(YocoPaymentResultInfo.ResultKeys.Transaction) as YocoPaymentResult?
+
+        val res = PaymentResult().injectValues(
+                resultCode = resCode.get(),
+                errorMessage = transactionResult?.errorMessage,
+                paymentResult = transactionResult,
+        )
+
+        refundPromise?.resolve(res)
+
+        refundPromise = null
     }
 }
