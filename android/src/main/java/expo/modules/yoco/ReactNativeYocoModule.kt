@@ -81,7 +81,7 @@ class ReactNativeYocoModule : Module() {
             val tippingConfig = when (tipInCents) {
                 null -> YocoTippingConfig.DO_NOT_ASK_FOR_TIP
                 0 -> YocoTippingConfig.ASK_FOR_TIP_ON_CARD_MACHINE
-                else -> YocoTippingConfig.INCLUDE_TIP_IN_AMOUNT(tipInCents)
+                else -> YocoTippingConfig.INCLUDE_TIP_IN_AMOUNT(tipInCents.toInt())
             }
 
             val paymentParams = YocoPaymentParameters(
