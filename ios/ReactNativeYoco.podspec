@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.dependency 'ExpoModulesCore'
-  s.dependency 'YocoSDK', '4.13.7'
+  s.dependency 'YocoSDK', '5.0.4'
 
   # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
