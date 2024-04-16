@@ -4,15 +4,15 @@ import android.app.Activity
 import android.content.Context
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
-import com.yoco.payment_ui_sdk.YocoSDK
-import com.yoco.payment_ui_sdk.data.YocoStaff
-import com.yoco.payment_ui_sdk.data.delegates.DefaultReceiptDelegate
-import com.yoco.payment_ui_sdk.data.enums.SDKEnvironment
-import com.yoco.payment_ui_sdk.data.params.RefundParameters as YocoRefundParameters
-import com.yoco.payment_ui_sdk.data.params.TippingConfig as YocoTippingConfig
-import com.yoco.payment_ui_sdk.data.result.PaymentResultInfo as YocoPaymentResultInfo
-import com.yoco.payment_ui_sdk.data.params.PaymentParameters as YocoPaymentParameters
-import com.yoco.payment_ui_sdk.data.result.PaymentResult as YocoPaymentResult
+import com.yoco.payments.sdk.YocoSDK
+import com.yoco.payments.sdk.data.YocoStaff
+import com.yoco.payments.sdk.data.delegates.DefaultReceiptDelegate
+import com.yoco.payments.sdk.data.enums.SDKEnvironment
+import com.yoco.payments.sdk.data.params.RefundParameters as YocoRefundParameters
+import com.yoco.payments.sdk.data.params.TippingConfig as YocoTippingConfig
+import com.yoco.payments.sdk.data.result.PaymentResultInfo as YocoPaymentResultInfo
+import com.yoco.payments.sdk.data.params.PaymentParameters as YocoPaymentParameters
+import com.yoco.payments.sdk.data.result.PaymentResult as YocoPaymentResult
 import expo.modules.kotlin.Promise
 import expo.modules.kotlin.events.OnActivityResultPayload
 import expo.modules.kotlin.exception.CodedException

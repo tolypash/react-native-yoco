@@ -25,10 +25,10 @@ class SupportedCurrencyAdaptor(value: String) {
      * Function to get the Yoco Payment UI enum from SupportedCurrency enum
      * Defaults to ZAR if invalid
      */
-    fun toYoco(): com.yoco.payment_ui_sdk.data.enums.SupportedCurrency {
+    fun toYoco(): com.yoco.payments.sdk.data.enums.SupportedCurrency {
         return when (this.currency) {
-            SupportedCurrency.ZAR -> com.yoco.payment_ui_sdk.data.enums.SupportedCurrency.ZAR
-            else -> com.yoco.payment_ui_sdk.data.enums.SupportedCurrency.ZAR
+            SupportedCurrency.ZAR -> com.yoco.payments.sdk.data.enums.SupportedCurrency.ZAR
+            else -> com.yoco.payments.sdk.data.enums.SupportedCurrency.ZAR
         }
     }
 }

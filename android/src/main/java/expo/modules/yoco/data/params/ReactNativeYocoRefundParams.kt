@@ -1,7 +1,7 @@
 package expo.modules.yoco.data.params
 
-import com.yoco.payment_ui_sdk.data.YocoStaff
-import com.yoco.payment_ui_sdk.data.delegates.ReceiptDelegate
+import com.yoco.payments.sdk.data.YocoStaff
+import com.yoco.payments.sdk.data.delegates.ReceiptDelegate
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
 

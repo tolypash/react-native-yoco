@@ -1,6 +1,6 @@
 package expo.modules.yoco.enums
 
-import com.yoco.payment_ui_sdk.data.result.PaymentResultInfo
+import com.yoco.payments.sdk.data.result.PaymentResultInfo
 import expo.modules.kotlin.types.Enumerable
 
 enum class ResultCode(val value: String) : Enumerable {

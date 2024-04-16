@@ -9,7 +9,7 @@ class ReceiptInfo : Record {
     var authorizationCode: String? = null
     var transactionTime: String? = null
 
-    fun injectValues(receiptInfo: com.yoco.payment_ui_sdk.data.result.ReceiptInfo?): ReceiptInfo {
+    fun injectValues(receiptInfo: com.yoco.payments.sdk.data.result.ReceiptInfo?): ReceiptInfo {
         this.authorizationCode = receiptInfo?.authorizationCode
         this.transactionTime = receiptInfo?.transactionTime
 
@@ -51,7 +51,7 @@ class PaymentResult : Record {
     fun injectValues(
         resultCode: ResultCode,
         errorMessage: String?,
-        paymentResult: com.yoco.payment_ui_sdk.data.result.PaymentResult?,
+        paymentResult: com.yoco.payments.sdk.data.result.PaymentResult?,
     ): PaymentResult {
         if (resultCode != null) {
             this.resultCode = resultCode
@@ -71,5 +71,3 @@ class PaymentResult : Record {
         return this
     }
 }
-
-
