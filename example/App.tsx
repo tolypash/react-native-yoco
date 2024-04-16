@@ -111,10 +111,10 @@ export default function App() {
                   await check(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
                 );
               } else if (Platform.OS === "ios") {
-                await request(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL);
+                await request(PERMISSIONS.IOS.BLUETOOTH);
                 await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
 
-                console.log(await check(PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL));
+                console.log(await check(PERMISSIONS.IOS.BLUETOOTH));
                 console.log(await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE));
               }
             }}

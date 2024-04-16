@@ -9,15 +9,15 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "~49.0.8",
-    "expo-gradle-ext-vars": "^0.1.1",
-    "expo-splash-screen": "~0.20.5",
-    "expo-status-bar": "~1.6.0",
+    "@react-native-clipboard/clipboard": "^1.14.0",
+    "expo": "~50.0.13",
+    "expo-gradle-ext-vars": "^0.1.2",
+    "expo-splash-screen": "~0.26.4",
+    "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
-    "react-native": "0.72.4",
+    "react-native": "0.73.5",
     "react-native-json-tree": "^1.3.0",
-    "react-native-permissions": "^3.9.0",
-    "@react-native-clipboard/clipboard": "^1.11.2"
+    "react-native-permissions": "4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
