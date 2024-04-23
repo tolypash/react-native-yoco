@@ -45,15 +45,12 @@ npx expo install expo-gradle-ext-vars
 [
   "expo-gradle-ext-vars",
   {
-    "yocoDevice": true,
-    "devMode": true
+    "yocoDevice": true
   }
 ]
 ```
 
 `yocoDevice` must be set to `true` if you are installing on a [Yoco device](https://www.yoco.com/za/card-machines/)
-
-`devMode` must be set to `true` if you will be running app with `npx expo run:android` (because that includes the dependency `expo-dev-launcher`, and there is a version issue with it).
 
 So your plugins should look something like this (if you have other plugins, they will be there too):
 
@@ -64,7 +61,6 @@ So your plugins should look something like this (if you have other plugins, they
         "expo-gradle-ext-vars",
         {
           "yocoDevice": true,
-          "devMode": true
         }
       ],
 ]
@@ -72,21 +68,16 @@ So your plugins should look something like this (if you have other plugins, they
 
 ## Android
 
-- Assuming you're using latest version of `expo`, there are some issues with dependency versions, therefore you need to add the following in your `app/build.gradle` file, under `android`:
+The PaymentsSDK uses the Data Binding Library and therefore requires any module using the library to enable data binding.
+https://developer.android.com/jetpack/androidx/releases/databinding
+
+Also you will need to add the remote repository (maven url) to your gradle dependencies in your build.gradle
 
 ```gradle
-  configurations.all {
-        resolutionStrategy.dependencySubstitution {
-            substitute module('org.bouncycastle:bcprov-jdk15to18:1.70') with module('com.yoco.ono.android:dspreadAndroid:1.23.6')
-            substitute module('org.bouncycastle:bcutil-jdk15to18:1.70') with module('com.yoco.ono.android:dspreadAndroid:1.23.6')
-        }
-
-        if (rootProject.ext.has("devMode") ? !rootProject.ext.get("devMode") : false) {
-            resolutionStrategy {
-                force 'io.insert-koin:koin-core:2.0.1'
-            }
-        }
-    }
+    repositories {
+        mavenCentral()
+        +maven { url 'https://yocotechnologies.jfrog.io/artifactory/public/' }
+   }
 ```
 
 ## iOS
