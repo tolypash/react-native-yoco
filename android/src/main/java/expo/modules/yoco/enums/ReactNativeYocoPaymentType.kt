@@ -6,7 +6,6 @@ enum class PaymentType(val value: String) : Enumerable {
     UNKNOWN("UNKNOWN"),
     CARD("CARD"),
     CASH("CASH"),
-    QR("QR");
 }
 
 class PaymentTypeAdaptor(value: String) {
@@ -16,7 +15,6 @@ class PaymentTypeAdaptor(value: String) {
         this.paymentType = when (value) {
             "CARD" -> PaymentType.CARD
             "CASH" -> PaymentType.CASH
-            "QR" -> PaymentType.QR
             else -> PaymentType.UNKNOWN
         }
     }
@@ -33,7 +31,6 @@ class PaymentTypeAdaptor(value: String) {
         return when (this.paymentType) {
             PaymentType.CARD -> com.yoco.payments.sdk.data.enums.PaymentType.CARD
             PaymentType.CASH -> com.yoco.payments.sdk.data.enums.PaymentType.CASH
-            PaymentType.QR -> com.yoco.payments.sdk.data.enums.PaymentType.QR
             else -> com.yoco.payments.sdk.data.enums.PaymentType.CARD
         }
     }
