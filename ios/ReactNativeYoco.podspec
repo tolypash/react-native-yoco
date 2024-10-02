@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.author         = package['author']
   s.homepage       = package['homepage']
   s.platform       = :ios, '13.0'
-  s.swift_version  = '5.4'
+  s.swift_version  = '5.7'
   s.source         = { git: 'https://github.com/tolypash/react-native-yoco' }
   s.static_framework = true
 

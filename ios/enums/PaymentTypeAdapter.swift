@@ -31,15 +31,18 @@ struct PaymentTypeAdapter {
      * Defaults to CARD if invalid
      */
     func toYoco() -> YocoSDK.YocoPaymentType {
-        let result = eval {
-            switch self.paymentType {
-            case .CARD: YocoSDK.YocoPaymentType.card
-            case .CASH: YocoSDK.YocoPaymentType.cash
-            case .QR: YocoSDK.YocoPaymentType.qr
-            default: YocoSDK.YocoPaymentType.card
-            }
-        }
-        
-        return result
+        let result: YocoSDK.YocoPaymentType
+switch self.paymentType {
+case .CARD:
+    result = YocoSDK.YocoPaymentType.card
+case .CASH:
+    result = YocoSDK.YocoPaymentType.cash
+case .QR:
+    result = YocoSDK.YocoPaymentType.qr
+default:
+    result = YocoSDK.YocoPaymentType.card
+}
+
+return result
     }
 }
