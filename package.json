@@ -32,14 +32,14 @@
   "author": "Anatoly Pashias <anatoly.pashias6@gmail.com> (https://github.com/tolypash)",
   "license": "MIT",
   "homepage": "https://github.com/tolypash/react-native-yoco#readme",
-  "devDependencies": {
-    "@types/react": "^18.0.25",
-    "expo-module-scripts": "^3.0.11",
-    "expo-modules-core": "^1.5.7"
-  },
   "peerDependencies": {
     "expo": "*",
     "react": "*",
     "react-native": "*"
+  },
+  "dependencies": {
+    "@types/react": "^18.3.10",
+    "expo-module-scripts": "^3.5.2",
+    "expo-modules-core": "^1.12.24"
   }
 }
