@@ -1,6 +1,6 @@
 {
   "name": "react-native-yoco",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "The Yoco SDK allows app developers to integrate with Yoco card machines to accept in-person payments from within their application. The most common scenario is to accept Yoco payments from within your Point of Sale application.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
