@@ -27,13 +27,13 @@ struct CurrencyAdapter {
      * Defaults to ZAR if invalid
      */
     func toYoco() -> YocoSDK.SupportedCurrency {
-        let result = eval {
-            switch self.currency {
-            case .ZAR: YocoSDK.SupportedCurrency.zar
-            default: YocoSDK.SupportedCurrency.zar
-            }
-        }
-        
-        return result
+    let result: YocoSDK.SupportedCurrency
+    switch self.currency {
+    case .ZAR:
+        result = YocoSDK.SupportedCurrency.zar
+    default:
+        result = YocoSDK.SupportedCurrency.zar
     }
+    return result
+}
 }
