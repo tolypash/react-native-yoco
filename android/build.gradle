@@ -102,7 +102,7 @@ allprojects {
 
 dependencies {
   def yoco_sdk_version = "2.1.0"
-  def ono_sdk_version = "2.1.0"
+  def ono_sdk_version = "2.3.23"
 
   implementation project(':expo-modules-core')
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${getKotlinVersion()}"

@@ -14,17 +14,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import JSONTree from "react-native-json-tree";
-import { request, check, PERMISSIONS } from "react-native-permissions";
-import { useClipboard } from "@react-native-clipboard/clipboard";
 import config from "./config.json";
+import * as Clipboard from "expo-clipboard";
+import * as Location from "expo-location";
 
 import * as ReactNativeYoco from "react-native-yoco";
 
 const LOGO_DIMENSIONS = { width: 651, height: 286 };
 
 export default function App() {
-  const [, setToClipboard] = useClipboard();
-
   const [secret, setSecret] = useState(config?.secret || "");
 
   const [pairTerminalLoading, setPairTerminalLoading] = useState(false);
@@ -56,7 +54,7 @@ export default function App() {
   const [refundLoading, setRefundLoading] = useState(false);
 
   function copyData(data: object) {
-    setToClipboard(JSON.stringify(data, null, 4));
+    Clipboard.setStringAsync(JSON.stringify(data, null, 2));
   }
 
   return (
@@ -97,25 +95,16 @@ export default function App() {
             title="Request permissions"
             onPress={async () => {
               if (Platform.OS === "android") {
-                await request(PERMISSIONS.ANDROID.BLUETOOTH_CONNECT);
-                await request(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
-                await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-                await request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION);
+                // await request(PERMISSIONS.ANDROID.BLUETOOTH_CONNECT);
+                // await request(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
+                await Location.requestForegroundPermissionsAsync();
+                await Location.requestBackgroundPermissionsAsync();
 
-                console.log(await check(PERMISSIONS.ANDROID.BLUETOOTH_CONNECT));
-                console.log(await check(PERMISSIONS.ANDROID.BLUETOOTH_SCAN));
-                console.log(
-                  await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
-                );
-                console.log(
-                  await check(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
-                );
+                console.log(await Location.getForegroundPermissionsAsync());
+                console.log(await Location.getBackgroundPermissionsAsync());
               } else if (Platform.OS === "ios") {
-                await request(PERMISSIONS.IOS.BLUETOOTH);
-                await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-
-                console.log(await check(PERMISSIONS.IOS.BLUETOOTH));
-                console.log(await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE));
+                await Location.requestForegroundPermissionsAsync();
+                await Location.requestBackgroundPermissionsAsync();
               }
             }}
           />
