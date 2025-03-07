@@ -13,7 +13,6 @@ import com.yoco.payments.sdk.data.params.TippingConfig as YocoTippingConfig
 import com.yoco.payments.sdk.data.result.PaymentResultInfo as YocoPaymentResultInfo
 import com.yoco.payments.sdk.data.params.PaymentParameters as YocoPaymentParameters
 import com.yoco.payments.sdk.data.result.PaymentResult as YocoPaymentResult
-import com.yoco.payments.sdk.data.params.PrinterConfig as YocoPrinterConfig
 import expo.modules.kotlin.Promise
 import expo.modules.kotlin.events.OnActivityResultPayload
 import expo.modules.kotlin.exception.CodedException
@@ -103,8 +102,8 @@ class ReactNativeYocoModule : Module() {
                     PaymentTypeAdaptor(paymentType.toString()).toYoco(),
                     SupportedCurrencyAdaptor(currency.toString()).toYoco(),
                     tippingConfig,
-                    YocoPrinterConfig(),
-                    paymentParams
+                    paymentParams,
+                    null,
                 )
             } catch (e: Exception) {
                 promise.reject(e.toCodedException())
@@ -128,7 +127,8 @@ class ReactNativeYocoModule : Module() {
                     YocoSDK.showPaymentResult(
                         context = currentActivity,
                         paymentResult = result,
-                        params = null,
+                        paymentParameters = null,
+                        printParameters = null
                     )
                 }
 
@@ -185,7 +185,7 @@ class ReactNativeYocoModule : Module() {
                     context = currentActivity,
                     transactionId,
                     parameters,
-                    YocoPrinterConfig(),
+                    null,
                 )
             } catch (e: Exception) {
                 promise.reject(e.toCodedException())

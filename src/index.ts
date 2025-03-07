@@ -1,9 +1,3 @@
-import {
-  NativeModulesProxy,
-  EventEmitter,
-  Subscription,
-} from "expo-modules-core";
-
 // Import the native module. On web, it will be resolved to ReactNativeYoco.web.ts
 // and on native platforms to ReactNativeYoco.ts
 import ReactNativeYocoModule from "./ReactNativeYocoModule";
@@ -29,7 +23,7 @@ import {
  * @returns {void}
  * @throws {Error}
  */
-export function initialise() {
+export function initialise(): void {
   return ReactNativeYocoModule.initialise();
 }
 
@@ -99,16 +93,6 @@ export async function queryTransactions(
   params: QueryTransactionsParams
 ): Promise<QueryTransactionsResult> {
   return await ReactNativeYocoModule.queryTransactions(params.receiptNumber);
-}
-
-const emitter = new EventEmitter(
-  ReactNativeYocoModule ?? NativeModulesProxy.ReactNativeYoco
-);
-
-export function addChangeListener(
-  listener: (event: ChangeEventPayload) => void
-): Subscription {
-  return emitter.addListener<ChangeEventPayload>("onChange", listener);
 }
 
 export {

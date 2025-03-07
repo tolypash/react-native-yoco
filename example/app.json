@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -49,18 +50,6 @@
         "expo-gradle-ext-vars",
         {
           "yocoDevice": false
-        }
-      ],
-      [
-        "expo-splash-screen",
-        {
-          "backgroundColor": "#000000",
-          "image": "./assets/splash.png",
-          "dark": {
-            "image": "./assets/splash.png",
-            "backgroundColor": "#000000"
-          },
-          "imageWidth": 200
         }
       ],
       "../app.plugin.js"

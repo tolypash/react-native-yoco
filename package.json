@@ -1,6 +1,6 @@
 {
   "name": "react-native-yoco",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "description": "The Yoco SDK allows app developers to integrate with Yoco card machines to accept in-person payments from within their application. The most common scenario is to accept Yoco payments from within your Point of Sale application.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -12,7 +12,7 @@
     "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
-    "open:ios": "open -a \"Xcode\" example/ios",
+    "open:ios": "xed example/ios",
     "open:android": "open -a \"Android Studio\" example/android"
   },
   "keywords": [
@@ -32,10 +32,12 @@
   "author": "Anatoly Pashias <anatoly.pashias6@gmail.com> (https://github.com/tolypash)",
   "license": "MIT",
   "homepage": "https://github.com/tolypash/react-native-yoco#readme",
+  "dependencies": {},
   "devDependencies": {
-    "@types/react": "^18.3.18",
-    "expo-module-scripts": "^3.0.11",
-    "expo-modules-core": "^1.5.7"
+    "@types/react": "~18.3.12",
+    "expo-module-scripts": "^4.0.3",
+    "expo": "~52.0.0",
+    "react-native": "0.76.0"
   },
   "peerDependencies": {
     "expo": "*",

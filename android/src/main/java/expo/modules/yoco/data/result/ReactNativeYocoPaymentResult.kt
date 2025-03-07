@@ -49,7 +49,7 @@ class PaymentResult : Record {
     var receiptInfo: ReceiptInfo? = null
 
     fun injectValues(
-        resultCode: ResultCode,
+        resultCode: ResultCode?,
         errorMessage: String?,
         paymentResult: com.yoco.payments.sdk.data.result.PaymentResult?,
     ): PaymentResult {

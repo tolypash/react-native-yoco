@@ -34,7 +34,7 @@ buildscript {
   dependencies {
     classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${getKotlinVersion()}")
 
-    classpath("org.jfrog.buildinfo:build-info-extractor-gradle:5.1.2")
+    classpath("org.jfrog.buildinfo:build-info-extractor-gradle:latest.release")
   }
 }
 
@@ -101,7 +101,7 @@ allprojects {
 }
 
 dependencies {
-  def yoco_sdk_version = "2.1.0"
+  def yoco_sdk_version = "2.5.13"
   def ono_sdk_version = "2.3.23"
 
   implementation project(':expo-modules-core')

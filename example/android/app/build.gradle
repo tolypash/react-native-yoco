@@ -116,7 +116,7 @@ android {
             crunchPngs (findProperty('android.enablePngCrunchInReleaseBuilds')?.toBoolean() ?: true)
         }
     }
-     buildFeatures {
+    buildFeatures {
       dataBinding true
     }
     packagingOptions {
