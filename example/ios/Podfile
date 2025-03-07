@@ -62,13 +62,12 @@ target 'reactnativeyocoexample' do
         end
       end
     end
-      
-      post_install do |pi|
-          pi.pods_project.targets.each do |t|
-            t.build_configurations.each do |config|
-              config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
-            end
-          end
-        end
+
+    # This is required for YocoSDK as it doesn't support build on Apple Silicon
+    # see https://gitlab.com/yoco-public/yoco-sdk-mobile-ios/-/issues/1
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings["ONLY_ACTIVE_ARCH"] = "YES"
+      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+    end
   end
 end
