@@ -30,7 +30,7 @@ public class ReactNativeYocoModule: Module {
         }
         
         AsyncFunction("charge") { (amountInCents: UInt64, paymentType: String, currency: String, tipInCents: Int32?, paymentParameters: PaymentParams?, promise: Promise) in
-            DispatchQueue.main.async {
+            let workItem = DispatchWorkItem {
                 var tippingConfig: YocoSDK.TippingConfig = .DO_NOT_ASK_FOR_TIP
                 let parameters = PaymentParameters(
                     autoTransition: false,
@@ -42,11 +42,11 @@ public class ReactNativeYocoModule: Module {
                     note: paymentParameters?.note
                 )
                 
-                if (tipInCents != nil) {
-                    if (tipInCents == 0) {
+                if let tip = tipInCents {
+                    if tip == 0 {
                         tippingConfig = .ASK_FOR_TIP_ON_CARD_MACHINE
                     } else {
-                        tippingConfig = .INCLUDE_TIP_IN_AMOUNT(tipInCents: tipInCents!)
+                        tippingConfig = .INCLUDE_TIP_IN_AMOUNT(tipInCents: tip)
                     }
                 }
                 
@@ -55,13 +55,14 @@ public class ReactNativeYocoModule: Module {
                     paymentType: PaymentTypeAdapter(paymentType).toYoco(),
                     currency: CurrencyAdapter(currency).toYoco(),
                     tippingConfig: tippingConfig,
-                    printerConfig: nil,
-                    parameters: parameters
+                    paymentParameters: parameters
                 ) { paymentResult in
                     let res = PaymentResult(result: paymentResult)
                     promise.resolve(res.toDictionary())
                 }
             }
+            
+            DispatchQueue.main.async(execute: workItem)
         }
         
         AsyncFunction("getPaymentResult") { (transactionId: String, show: Bool, promise: Promise) in
@@ -134,7 +135,7 @@ public class ReactNativeYocoModule: Module {
                     staffMember: staff
                 )
                 
-                Yoco.refund(transactionID: transactionId, parameters: parameters) { (paymentResult) in
+                Yoco.refund(transactionID: transactionId, refundParameters: parameters) { (paymentResult) in
                     let res = PaymentResult(result: paymentResult)
                     promise.resolve(res.toDictionary())
                 }

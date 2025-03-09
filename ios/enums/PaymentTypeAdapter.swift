@@ -16,7 +16,6 @@ struct PaymentTypeAdapter {
             switch value.lowercased() {
             case "card": PaymentTypeEnum.CARD
             case "cash": PaymentTypeEnum.CASH
-            case "qr": PaymentTypeEnum.QR
             default: PaymentTypeEnum.UNKNOWN
             }
         }
@@ -37,8 +36,6 @@ struct PaymentTypeAdapter {
             result = YocoSDK.YocoPaymentType.card
         case .CASH:
             result = YocoSDK.YocoPaymentType.cash
-        case .QR:
-            result = YocoSDK.YocoPaymentType.qr
         default:
             result = YocoSDK.YocoPaymentType.card
         }

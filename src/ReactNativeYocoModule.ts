@@ -1,7 +1,5 @@
 import { requireNativeModule } from "expo";
 import {
-  ChargeParams,
-  ConfigureParams,
   PaymentParameters,
   PaymentResult,
   QueryTransactionsResult,
