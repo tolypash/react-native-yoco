@@ -101,9 +101,9 @@ allprojects {
 }
 
 dependencies {
-  def yoco_sdk_version = "2.5.31"
-  def ono_sdk_version = "2.4.5"
-  def terminal_drivers_version = "2.4.6"
+  def yoco_sdk_version = "2.6.9"
+  def ono_sdk_version = "2.6.0"
+  def terminal_drivers_version = "2.9.0"
 
   implementation project(':expo-modules-core')
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${getKotlinVersion()}"
