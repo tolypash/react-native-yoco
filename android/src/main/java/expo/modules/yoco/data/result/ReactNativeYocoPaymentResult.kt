@@ -7,6 +7,8 @@ import expo.modules.yoco.enums.*
 class ReceiptInfo : Record {
     @Field
     var authorizationCode: String? = null
+
+    @Field
     var transactionTime: String? = null
 
     fun injectValues(receiptInfo: com.yoco.payments.sdk.data.result.ReceiptInfo?): ReceiptInfo {

@@ -72,8 +72,8 @@ class ReactNativeYocoModule : Module() {
 
                 YocoSDK.pairTerminal(context = currentActivity)
             } catch (e: Exception) {
+                pairTerminalPromise = null
                 promise.reject(e.toCodedException())
-                throw e
             }
         }
 
@@ -106,8 +106,8 @@ class ReactNativeYocoModule : Module() {
                     null,
                 )
             } catch (e: Exception) {
+                chargePromise = null
                 promise.reject(e.toCodedException())
-                throw e
             }
         }
 
@@ -188,8 +188,8 @@ class ReactNativeYocoModule : Module() {
                     null,
                 )
             } catch (e: Exception) {
+                refundPromise = null
                 promise.reject(e.toCodedException())
-                throw e
             }
         }.runOnQueue(Queues.MAIN)
 
